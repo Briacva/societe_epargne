@@ -155,6 +155,12 @@ public class CreationClientForm extends JFrame {
                 textArea_6.setText("");
 			}
 		});
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setIcon(new ImageIcon(CreationClientForm.class.getResource("/images/BGimage.jpg")));
+		lblNewLabel_2.setBounds(0, 0, 1184, 761);
+		getContentPane().add(lblNewLabel_2);
+		
 		this.setVisible(true);
 	}
 }
