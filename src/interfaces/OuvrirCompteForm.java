@@ -1,16 +1,20 @@
 package interfaces;
 
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import services.CompteService;
 
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.ButtonGroup;
 
 import javax.swing.JTextField;
@@ -18,6 +22,8 @@ import javax.swing.JSeparator;
 import java.awt.SystemColor;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class OuvrirCompteForm extends JFrame {
 	/**
@@ -142,6 +148,7 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(separatorTypeCompte);
 		
 		textFieldNumCompte = new JTextField();
+		textFieldNumCompte.setForeground(Color.WHITE);
 		textFieldNumCompte.setEditable(false);
 		textFieldNumCompte.setBackground(new Color(51, 102, 102));
 		textFieldNumCompte.setBounds(304, 53, 326, 33);
@@ -153,6 +160,7 @@ public class OuvrirCompteForm extends JFrame {
 		compteService.generateNumCompte(textFieldNumCompte);
 		
 		textFieldRaisonSociale = new JTextField();
+		textFieldRaisonSociale.setForeground(Color.WHITE);
 		textFieldRaisonSociale.setEditable(false);
 		textFieldRaisonSociale.setColumns(10);
 		textFieldRaisonSociale.setBorder(null);
@@ -161,6 +169,7 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(textFieldRaisonSociale);
 		
 		textFieldSoldeInitial = new JTextField();
+		textFieldSoldeInitial.setForeground(Color.WHITE);
 		textFieldSoldeInitial.setColumns(10);
 		textFieldSoldeInitial.setBackground(new Color(51, 102, 102));
 		textFieldSoldeInitial.setBounds(304, 161, 326, 33);
@@ -168,6 +177,7 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(textFieldSoldeInitial);
 		
 		textFieldSoldeMinimum = new JTextField();
+		textFieldSoldeMinimum.setForeground(Color.WHITE);
 		textFieldSoldeMinimum.setColumns(10);
 		textFieldSoldeMinimum.setBackground(new Color(51, 102, 102));
 		textFieldSoldeMinimum.setBounds(304, 263, 326, 33);
@@ -175,6 +185,7 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(textFieldSoldeMinimum);
 		
 		textFieldFraisDeTransfert = new JTextField();
+		textFieldFraisDeTransfert.setForeground(Color.WHITE);
 		textFieldFraisDeTransfert.setColumns(10);
 		textFieldFraisDeTransfert.setBorder(null);
 		textFieldFraisDeTransfert.setBackground(new Color(51, 102, 102));
@@ -182,18 +193,20 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(textFieldFraisDeTransfert);
 		
 		textFieldPlafond = new JTextField();
+		textFieldPlafond.setForeground(Color.WHITE);
 		textFieldPlafond.setColumns(10);
 		textFieldPlafond.setBorder(null);
 		textFieldPlafond.setEditable(false);
-		textFieldPlafond.setBackground(new Color(51, 102, 102));
+		textFieldPlafond.setBackground(new Color(26, 53, 53));
 		textFieldPlafond.setBounds(304, 408, 326, 33);
 		subPanelForm.add(textFieldPlafond);
 		
 		textFieldTauxInteret = new JTextField();
+		textFieldTauxInteret.setForeground(Color.WHITE);
 		textFieldTauxInteret.setColumns(10);
 		textFieldTauxInteret.setBorder(null);
 		textFieldTauxInteret.setEditable(false);
-		textFieldTauxInteret.setBackground(new Color(51, 102, 102));
+		textFieldTauxInteret.setBackground(new Color(26, 53, 53));
 		textFieldTauxInteret.setBounds(304, 363, 326, 33);
 		subPanelForm.add(textFieldTauxInteret);
 		
@@ -203,11 +216,57 @@ public class OuvrirCompteForm extends JFrame {
 		rdbtnCompteCourant.setBackground(new Color(0, 0, 0, 0));
 		rdbtnCompteCourant.setSelected(true);
 		rdbtnCompteCourant.setBounds(306, 206, 160, 39);
+		rdbtnCompteCourant.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("couille");
+				
+				// Réinitialisation des champs spécifiques au compte épargne
+				textFieldPlafond.setText(null);
+				textFieldPlafond.setEditable(false);
+				textFieldPlafond.setBackground(new Color(26, 53, 53));
+				textFieldTauxInteret.setText(null);
+				textFieldTauxInteret.setEditable(false);
+				textFieldTauxInteret.setBackground(new Color(26, 53, 53));
+				
+				// Activation des champs spécifiques au compte courant
+				textFieldSoldeMinimum.setEditable(true);
+				textFieldSoldeMinimum.setBackground(new Color(51, 102, 102));
+				textFieldFraisDeTransfert.setEditable(true);
+				textFieldFraisDeTransfert.setBackground(new Color(51, 102, 102));		
+			}
+		});
+		
 		subPanelForm.add(rdbtnCompteCourant);
 		
 		JRadioButton rdbtnCompteEpargne = new JRadioButton("Epargne");
 		rdbtnCompteEpargne.setBackground(new Color(0, 0, 0, 0));
 		rdbtnCompteEpargne.setBounds(470, 206, 160, 39);
+		rdbtnCompteEpargne.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("vulvax clitorax");
+				
+				// Réinitialisation des champs spécifiques au compte épargne
+				textFieldSoldeMinimum.setText(null);
+				textFieldSoldeMinimum.setEditable(false);
+				textFieldSoldeMinimum.setBackground(new Color(26, 53, 53));
+				textFieldFraisDeTransfert.setText(null);
+				textFieldFraisDeTransfert.setEditable(false);
+				textFieldFraisDeTransfert.setBackground(new Color(26, 53, 53));
+				System.out.println(textFieldFraisDeTransfert.getText());
+				
+				// Activation des champs spécifiques au compte courant
+				textFieldPlafond.setEditable(true);
+				textFieldPlafond.setBackground(new Color(51, 102, 102));		
+				textFieldTauxInteret.setEditable(true);
+				textFieldTauxInteret.setBackground(new Color(51, 102, 102));		
+			}
+		});
 		subPanelForm.add(rdbtnCompteEpargne);
 		
 		// Ajout des boutons radio dans un groupe => sélection unique
@@ -216,10 +275,27 @@ public class OuvrirCompteForm extends JFrame {
 		radioButtonGroup.add(rdbtnCompteEpargne);
 		
 		JButton btnCreer = new JButton("Créer");
+		btnCreer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
 		btnCreer.setBounds(497, 524, 133, 33);
 		subPanelForm.add(btnCreer);
 		
 		JButton btnReinitialiser = new JButton("Réinitialiser");
+		btnReinitialiser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        Component component = (Component) e.getSource();
+		        OuvrirCompteForm test = (OuvrirCompteForm) component.getParent().getParent().getParent().getParent().getParent().getParent();
+		        System.out.println(test.textFieldNumCompte.getText());
+
+//		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+//		        System.out.println(frame.textFieldNumCompte.getText());
+//		        
+//		        compteService.fieldReinitialization(frame);
+			}
+		});
 		btnReinitialiser.setBounds(263, 524, 149, 33);
 		subPanelForm.add(btnReinitialiser);
 		
@@ -228,5 +304,61 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(btnRetour);
 		
 		pack();
+	}
+	
+	public JTextField getTextFieldNumCompte() {
+		return textFieldNumCompte;
+	}
+
+	public void setTextFieldNumCompte(JTextField textFieldNumCompte) {
+		this.textFieldNumCompte = textFieldNumCompte;
+	}
+
+	public JTextField getTextFieldSoldeInitial() {
+		return textFieldSoldeInitial;
+	}
+
+	public void setTextFieldSoldeInitial(JTextField textFieldSoldeInitial) {
+		this.textFieldSoldeInitial = textFieldSoldeInitial;
+	}
+
+	public JTextField getTextFieldSoldeMinimum() {
+		return textFieldSoldeMinimum;
+	}
+
+	public void setTextFieldSoldeMinimum(JTextField textFieldSoldeMinimum) {
+		this.textFieldSoldeMinimum = textFieldSoldeMinimum;
+	}
+
+	public JTextField getTextFieldRaisonSociale() {
+		return textFieldRaisonSociale;
+	}
+
+	public void setTextFieldRaisonSociale(JTextField textFieldRaisonSociale) {
+		this.textFieldRaisonSociale = textFieldRaisonSociale;
+	}
+
+	public JTextField getTextFieldFraisDeTransfert() {
+		return textFieldFraisDeTransfert;
+	}
+
+	public void setTextFieldFraisDeTransfert(JTextField textFieldFraisDeTransfert) {
+		this.textFieldFraisDeTransfert = textFieldFraisDeTransfert;
+	}
+
+	public JTextField getTextFieldPlafond() {
+		return textFieldPlafond;
+	}
+
+	public void setTextFieldPlafond(JTextField textFieldPlafond) {
+		this.textFieldPlafond = textFieldPlafond;
+	}
+
+	public JTextField getTextFieldTauxInteret() {
+		return textFieldTauxInteret;
+	}
+
+	public void setTextFieldTauxInteret(JTextField textFieldTauxInteret) {
+		this.textFieldTauxInteret = textFieldTauxInteret;
 	}
 }
