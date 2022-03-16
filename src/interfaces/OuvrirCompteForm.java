@@ -37,6 +37,15 @@ public class OuvrirCompteForm extends JFrame {
 	private JTextField textFieldFraisDeTransfert;
 	private JTextField textFieldPlafond;
 	private JTextField textFieldTauxInteret;
+	private JLabel lblNumCompteErreur;
+	private JLabel lblRaisonSocialeErreur;
+	private JLabel lblSoldeInitialError;
+	private JLabel lblSoldeMinimimError;
+	private JLabel lblFraisDeTransfertError;
+	private JLabel lblTauxInteretError;
+	private JLabel lblPlafondError;
+	private JRadioButton rdbtnCompteCourant;
+	private JRadioButton rdbtnCompteEpargne;
 	
 	public OuvrirCompteForm() {
 		// Instanciation du CompteService
@@ -65,16 +74,58 @@ public class OuvrirCompteForm extends JFrame {
 		lblBackgroundAccountManagement.setBounds(0, 0, 1200, 700);
 		panel.add(lblBackgroundAccountManagement);
 		
+		lblNumCompteErreur = new JLabel("");
+		lblNumCompteErreur.setForeground(new Color(153, 0, 0));
+		lblNumCompteErreur.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblNumCompteErreur.setBounds(304, 85, 326, 15);
+		subPanelForm.add(lblNumCompteErreur);
+		
+		lblRaisonSocialeErreur = new JLabel("");
+		lblRaisonSocialeErreur.setForeground(new Color(153, 0, 0));
+		lblRaisonSocialeErreur.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblRaisonSocialeErreur.setBounds(304, 140, 326, 15);
+		subPanelForm.add(lblRaisonSocialeErreur);
+		
+		lblSoldeInitialError = new JLabel("");
+		lblSoldeInitialError.setForeground(new Color(153, 0, 0));
+		lblSoldeInitialError.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblSoldeInitialError.setBounds(304, 194, 326, 15);
+		subPanelForm.add(lblSoldeInitialError);
+		
+		lblSoldeMinimimError = new JLabel("");
+		lblSoldeMinimimError.setForeground(new Color(153, 0, 0));
+		lblSoldeMinimimError.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblSoldeMinimimError.setBounds(304, 295, 326, 15);
+		subPanelForm.add(lblSoldeMinimimError);
+		
+		lblFraisDeTransfertError = new JLabel("");
+		lblFraisDeTransfertError.setForeground(new Color(153, 0, 0));
+		lblFraisDeTransfertError.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblFraisDeTransfertError.setBounds(304, 360, 326, 15);
+		subPanelForm.add(lblFraisDeTransfertError);
+		
+		lblTauxInteretError = new JLabel("");
+		lblTauxInteretError.setForeground(new Color(153, 0, 0));
+		lblTauxInteretError.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblTauxInteretError.setBounds(304, 420, 326, 15);
+		subPanelForm.add(lblTauxInteretError);
+		
+		lblPlafondError = new JLabel("");
+		lblPlafondError.setForeground(new Color(153, 0, 0));
+		lblPlafondError.setFont(new Font("Dialog", Font.PLAIN, 9));
+		lblPlafondError.setBounds(304, 487, 326, 15);
+		subPanelForm.add(lblPlafondError);
+		
 		JLabel lblNumCompte = new JLabel("Numéro de compte :");
 		lblNumCompte.setBounds(48, 57, 160, 24);
 		subPanelForm.add(lblNumCompte);
 		
 		JLabel lblTauxInteret = new JLabel("Taux d'intérêt :");
-		lblTauxInteret.setBounds(48, 367, 160, 24);
+		lblTauxInteret.setBounds(48, 391, 160, 24);
 		subPanelForm.add(lblTauxInteret);
 		
 		JLabel lblPlafond = new JLabel("Plafond :");
-		lblPlafond.setBounds(48, 412, 160, 24);
+		lblPlafond.setBounds(48, 455, 160, 24);
 		subPanelForm.add(lblPlafond);
 		
 		JLabel lblTypeDeCompe = new JLabel("Type de compe :");
@@ -87,7 +138,7 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(lblRaisonSociale);
 		
 		JLabel lblFraisDeTransfert = new JLabel("Frais de transfert :");
-		lblFraisDeTransfert.setBounds(48, 312, 160, 24);
+		lblFraisDeTransfert.setBounds(48, 329, 160, 24);
 		subPanelForm.add(lblFraisDeTransfert);
 		
 		JSeparator separatorNumCompte = new JSeparator();
@@ -108,13 +159,13 @@ public class OuvrirCompteForm extends JFrame {
 		JSeparator separatorPlafond = new JSeparator();
 		separatorPlafond.setForeground(new Color(0, 102, 102));
 		separatorPlafond.setBackground(SystemColor.desktop);
-		separatorPlafond.setBounds(48, 436, 60, 15);
+		separatorPlafond.setBounds(48, 480, 60, 15);
 		subPanelForm.add(separatorPlafond);
 		
 		JSeparator separatorTauxInteret = new JSeparator();
 		separatorTauxInteret.setForeground(new Color(0, 102, 102));
 		separatorTauxInteret.setBackground(SystemColor.desktop);
-		separatorTauxInteret.setBounds(48, 391, 60, 15);
+		separatorTauxInteret.setBounds(48, 415, 60, 15);
 		subPanelForm.add(separatorTauxInteret);
 		
 		JSeparator separatorSoldeInitial = new JSeparator();
@@ -132,7 +183,7 @@ public class OuvrirCompteForm extends JFrame {
 		JSeparator separatorFraisDeTransfert = new JSeparator();
 		separatorFraisDeTransfert.setForeground(new Color(0, 102, 102));
 		separatorFraisDeTransfert.setBackground(SystemColor.desktop);
-		separatorFraisDeTransfert.setBounds(48, 336, 60, 15);
+		separatorFraisDeTransfert.setBounds(48, 353, 60, 15);
 		subPanelForm.add(separatorFraisDeTransfert);
 		
 		JSeparator separatorSoldeMinimum = new JSeparator();
@@ -189,7 +240,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldFraisDeTransfert.setColumns(10);
 		textFieldFraisDeTransfert.setBorder(null);
 		textFieldFraisDeTransfert.setBackground(new Color(51, 102, 102));
-		textFieldFraisDeTransfert.setBounds(304, 308, 326, 33);
+		textFieldFraisDeTransfert.setBounds(304, 325, 326, 33);
 		subPanelForm.add(textFieldFraisDeTransfert);
 		
 		textFieldPlafond = new JTextField();
@@ -198,7 +249,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldPlafond.setBorder(null);
 		textFieldPlafond.setEditable(false);
 		textFieldPlafond.setBackground(new Color(26, 53, 53));
-		textFieldPlafond.setBounds(304, 408, 326, 33);
+		textFieldPlafond.setBounds(304, 451, 326, 33);
 		subPanelForm.add(textFieldPlafond);
 		
 		textFieldTauxInteret = new JTextField();
@@ -207,12 +258,12 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldTauxInteret.setBorder(null);
 		textFieldTauxInteret.setEditable(false);
 		textFieldTauxInteret.setBackground(new Color(26, 53, 53));
-		textFieldTauxInteret.setBounds(304, 363, 326, 33);
+		textFieldTauxInteret.setBounds(304, 387, 326, 33);
 		subPanelForm.add(textFieldTauxInteret);
 		
 		ButtonGroup radioButtonGroup = new ButtonGroup();
 		
-		JRadioButton rdbtnCompteCourant = new JRadioButton("Courant");
+		rdbtnCompteCourant = new JRadioButton("Courant");
 		rdbtnCompteCourant.setBackground(new Color(0, 0, 0, 0));
 		rdbtnCompteCourant.setSelected(true);
 		rdbtnCompteCourant.setBounds(306, 206, 160, 39);
@@ -221,7 +272,6 @@ public class OuvrirCompteForm extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("couille");
 				
 				// Réinitialisation des champs spécifiques au compte épargne
 				textFieldPlafond.setText(null);
@@ -241,7 +291,7 @@ public class OuvrirCompteForm extends JFrame {
 		
 		subPanelForm.add(rdbtnCompteCourant);
 		
-		JRadioButton rdbtnCompteEpargne = new JRadioButton("Epargne");
+		rdbtnCompteEpargne = new JRadioButton("Epargne");
 		rdbtnCompteEpargne.setBackground(new Color(0, 0, 0, 0));
 		rdbtnCompteEpargne.setBounds(470, 206, 160, 39);
 		rdbtnCompteEpargne.addActionListener(new ActionListener() {
@@ -249,7 +299,6 @@ public class OuvrirCompteForm extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("vulvax clitorax");
 				
 				// Réinitialisation des champs spécifiques au compte épargne
 				textFieldSoldeMinimum.setText(null);
@@ -258,7 +307,6 @@ public class OuvrirCompteForm extends JFrame {
 				textFieldFraisDeTransfert.setText(null);
 				textFieldFraisDeTransfert.setEditable(false);
 				textFieldFraisDeTransfert.setBackground(new Color(26, 53, 53));
-				System.out.println(textFieldFraisDeTransfert.getText());
 				
 				// Activation des champs spécifiques au compte courant
 				textFieldPlafond.setEditable(true);
@@ -277,30 +325,31 @@ public class OuvrirCompteForm extends JFrame {
 		JButton btnCreer = new JButton("Créer");
 		btnCreer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+		        Component component = (Component) e.getSource();
+		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+		        
+		        compteService.checkFillFields(frame);
 			}
 		});
 		
-		btnCreer.setBounds(497, 524, 133, 33);
+		btnCreer.setBounds(497, 541, 133, 33);
 		subPanelForm.add(btnCreer);
 		
 		JButton btnReinitialiser = new JButton("Réinitialiser");
 		btnReinitialiser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		        Component component = (Component) e.getSource();
-		        OuvrirCompteForm test = (OuvrirCompteForm) component.getParent().getParent().getParent().getParent().getParent().getParent();
-		        System.out.println(test.textFieldNumCompte.getText());
-
-//		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
-//		        System.out.println(frame.textFieldNumCompte.getText());
-//		        
-//		        compteService.fieldReinitialization(frame);
+		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+		        
+		        compteService.fieldReinitialization(frame);
 			}
 		});
-		btnReinitialiser.setBounds(263, 524, 149, 33);
+		
+		btnReinitialiser.setBounds(263, 541, 149, 33);
 		subPanelForm.add(btnReinitialiser);
 		
 		JButton btnRetour = new JButton("Retour");
-		btnRetour.setBounds(48, 524, 133, 33);
+		btnRetour.setBounds(48, 541, 133, 33);
 		subPanelForm.add(btnRetour);
 		
 		pack();
@@ -310,55 +359,63 @@ public class OuvrirCompteForm extends JFrame {
 		return textFieldNumCompte;
 	}
 
-	public void setTextFieldNumCompte(JTextField textFieldNumCompte) {
-		this.textFieldNumCompte = textFieldNumCompte;
-	}
-
 	public JTextField getTextFieldSoldeInitial() {
 		return textFieldSoldeInitial;
-	}
-
-	public void setTextFieldSoldeInitial(JTextField textFieldSoldeInitial) {
-		this.textFieldSoldeInitial = textFieldSoldeInitial;
 	}
 
 	public JTextField getTextFieldSoldeMinimum() {
 		return textFieldSoldeMinimum;
 	}
-
-	public void setTextFieldSoldeMinimum(JTextField textFieldSoldeMinimum) {
-		this.textFieldSoldeMinimum = textFieldSoldeMinimum;
-	}
-
+	
 	public JTextField getTextFieldRaisonSociale() {
 		return textFieldRaisonSociale;
-	}
-
-	public void setTextFieldRaisonSociale(JTextField textFieldRaisonSociale) {
-		this.textFieldRaisonSociale = textFieldRaisonSociale;
 	}
 
 	public JTextField getTextFieldFraisDeTransfert() {
 		return textFieldFraisDeTransfert;
 	}
 
-	public void setTextFieldFraisDeTransfert(JTextField textFieldFraisDeTransfert) {
-		this.textFieldFraisDeTransfert = textFieldFraisDeTransfert;
-	}
-
 	public JTextField getTextFieldPlafond() {
 		return textFieldPlafond;
-	}
-
-	public void setTextFieldPlafond(JTextField textFieldPlafond) {
-		this.textFieldPlafond = textFieldPlafond;
 	}
 
 	public JTextField getTextFieldTauxInteret() {
 		return textFieldTauxInteret;
 	}
+	
+	public JRadioButton getRdbtnCompteCourant() {
+		return rdbtnCompteCourant;
+	}
 
-	public void setTextFieldTauxInteret(JTextField textFieldTauxInteret) {
-		this.textFieldTauxInteret = textFieldTauxInteret;
+	public JRadioButton getRdbtnCompteEpargne() {
+		return rdbtnCompteEpargne;
+	}
+	
+	public JLabel getLblNumCompteErreur() {
+		return lblNumCompteErreur;
+	}
+
+	public JLabel getLblRaisonSocialeErreur() {
+		return lblRaisonSocialeErreur;
+	}
+
+	public JLabel getLblSoldeInitialError() {
+		return lblSoldeInitialError;
+	}
+
+	public JLabel getLblSoldeMinimimError() {
+		return lblSoldeMinimimError;
+	}
+
+	public JLabel getLblFraisDeTransfertError() {
+		return lblFraisDeTransfertError;
+	}
+
+	public JLabel getLblTauxInteretError() {
+		return lblTauxInteretError;
+	}
+
+	public JLabel getLblPlafondError() {
+		return lblPlafondError;
 	}
 }
