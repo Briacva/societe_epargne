@@ -1,5 +1,4 @@
 package interfaces;
-
 import javax.swing.JFrame;
 import javax.swing.*;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
@@ -9,17 +8,22 @@ import java.awt.Font;
 import java.awt.CardLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
-public class CreationClientForm extends JFrame {
 
+public class CreationClientForm extends JFrame {
+	
+	
 	public CreationClientForm() {
 		getContentPane().setForeground(new Color(0, 255, 0));
 		setTitle("Societe d'epargne");
 		setSize(1200,800);
+		setResizable(false);
 		getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Inscription nouveau client");
+		JLabel lblNewLabel = new JLabel("Gestion Bancaire");
 		lblNewLabel.setForeground(Color.decode("#395B64"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Ebrima", Font.BOLD, 32));
@@ -97,19 +101,35 @@ public class CreationClientForm extends JFrame {
 		lblNewLabel_1_6.setBounds(326, 550, 201, 30);
 		getContentPane().add(lblNewLabel_1_6);
 		
-		JButton btnNewButton = new JButton("Valider");
-		btnNewButton.setBackground(new Color(255, 255, 255));
-		btnNewButton.setFont(new Font("Ebrima", Font.PLAIN, 14));
-		btnNewButton.setBounds(300, 649, 150, 40);
-		getContentPane().add(btnNewButton);
+		JButton btnValider = new JButton("Valider");
+		btnValider.setBackground(new Color(255, 255, 255));
+		btnValider.setFont(new Font("Ebrima", Font.PLAIN, 14));
+		btnValider.setBounds(300, 649, 150, 40);
+		getContentPane().add(btnValider);
+//		btnValider.addActionListener(new ActionListener() {
+//
+////			@Override
+////			public void actionPerformed(ActionEvent e) {
+////				
+////				 public static boolean isValid(String email){  
+////				        String emailFormate ="^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\."  
+////				                + "[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";  
+////				          
+////				        Pattern p = Pattern.compile(emailFormate);  
+////				        if(email == null){  
+////				        return false;  
+////				        }   
+////				        return p.matcher(email).matches();  
+////				    }      
+////				
+////			}
+//
+//			
+//		});
 		
 		JButton btnAnnuler = new JButton("Annuler");
 		btnAnnuler.setBackground(new Color(255, 255, 255));
 		btnAnnuler.setFont(new Font("Ebrima", Font.PLAIN, 14));
-		btnAnnuler.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnAnnuler.setBounds(750, 649, 150, 40);
 		getContentPane().add(btnAnnuler);
 		
@@ -119,18 +139,31 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JButton btnRinitialiser = new JButton("R\u00E9initialiser");
-		btnRinitialiser.setBackground(new Color(255, 255, 255));
-		btnRinitialiser.setFont(new Font("Ebrima", Font.PLAIN, 14));
-		btnRinitialiser.setBounds(270, 604, 150, 40);
-		panel.add(btnRinitialiser);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon(CreationClientForm.class.getResource("/images/BGimage.jpg")));
-		lblNewLabel_2.setBounds(0, 0, 1184, 761);
-		getContentPane().add(lblNewLabel_2);
-		
-		
+		JButton btnReinitialiser = new JButton("R\u00E9initialiser");
+		btnReinitialiser.setBackground(new Color(255, 255, 255));
+		btnReinitialiser.setFont(new Font("Ebrima", Font.PLAIN, 14));
+		btnReinitialiser.setBounds(270, 604, 150, 40);
+		panel.add(btnReinitialiser);
+		btnReinitialiser.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                textArea.setText("");
+                textArea_1.setText("");
+                textArea_2.setText("");
+                textArea_3.setText("");
+                textArea_4.setText("");
+                textArea_5.setText("");
+                textArea_6.setText("");
+			}
+		});
 		this.setVisible(true);
 	}
 }
+
+//
+//private static void clearFileds() {
+//	JTextArea.setText("");
+//	btnReinitialiser.clearSelection();
+//	
+//}
+
