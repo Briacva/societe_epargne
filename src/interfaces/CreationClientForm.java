@@ -1,7 +1,6 @@
 package interfaces;
 import javax.swing.JFrame;
 import javax.swing.*;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
