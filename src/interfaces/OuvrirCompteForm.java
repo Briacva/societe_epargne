@@ -21,9 +21,14 @@ import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
+import java.awt.TextField;
+
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 
 public class OuvrirCompteForm extends JFrame {
@@ -72,15 +77,15 @@ public class OuvrirCompteForm extends JFrame {
 		lblNumCompte.setBounds(48, 57, 160, 24);
 		subPanelForm.add(lblNumCompte);
 		
-		JLabel lblTauxInteret = new JLabel("Taux d'intérêt :");
+		JLabel lblTauxInteret = new JLabel("Taux d'intérêt* :");
 		lblTauxInteret.setBounds(48, 391, 160, 24);
 		subPanelForm.add(lblTauxInteret);
 		
-		JLabel lblPlafond = new JLabel("Plafond :");
+		JLabel lblPlafond = new JLabel("Plafond* :");
 		lblPlafond.setBounds(48, 455, 160, 24);
 		subPanelForm.add(lblPlafond);
 		
-		JLabel lblTypeDeCompe = new JLabel("Type de compe :");
+		JLabel lblTypeDeCompe = new JLabel("Type de compe* :");
 		lblTypeDeCompe.setBounds(48, 212, 160, 24);
 		subPanelForm.add(lblTypeDeCompe);
 		
@@ -89,7 +94,7 @@ public class OuvrirCompteForm extends JFrame {
 		lblRaisonSociale.setBounds(48, 111, 160, 24);
 		subPanelForm.add(lblRaisonSociale);
 		
-		JLabel lblFraisDeTransfert = new JLabel("Frais de transfert :");
+		JLabel lblFraisDeTransfert = new JLabel("Frais de transfert* :");
 		lblFraisDeTransfert.setBounds(48, 329, 160, 24);
 		subPanelForm.add(lblFraisDeTransfert);
 		
@@ -99,12 +104,12 @@ public class OuvrirCompteForm extends JFrame {
 		separatorNumCompte.setBounds(48, 80, 60, 15);
 		subPanelForm.add(separatorNumCompte);
 		
-		JLabel lblsoldeInitial = new JLabel("Solde initial :");
+		JLabel lblsoldeInitial = new JLabel("Solde initial* :");
 		lblsoldeInitial.setBackground(SystemColor.desktop);
 		lblsoldeInitial.setBounds(48, 165, 160, 24);
 		subPanelForm.add(lblsoldeInitial);
 		
-		JLabel lblSoldeMinimum = new JLabel("Solde minimum :");
+		JLabel lblSoldeMinimum = new JLabel("Solde minimum* :");
 		lblSoldeMinimum.setBounds(48, 267, 160, 24);
 		subPanelForm.add(lblSoldeMinimum);
 		
@@ -279,7 +284,40 @@ public class OuvrirCompteForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 		        Component component = (Component) e.getSource();
 		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
-		        compteService.checkFillFields(frame);
+		        Hashtable<String, List<String>> errors = compteService.checkFields(frame);
+		        
+		        if((errors.get("emptyFields").size() > 0)) {
+		        	
+	                String error = errors.get("emptyFields").stream().collect(Collectors.joining(", "));
+	                
+	                JOptionPane.showMessageDialog(getContentPane(), 
+	                      "Veuillez saisir le ou les champs suivants : " + error,
+	                      "Erreur",
+	                      JOptionPane.ERROR_MESSAGE);
+	                
+                }else if(errors.get("emptyFields").size() == 0 && errors.get("badNumericFields").size() > 0) {
+                	
+	                String error = errors.get("badNumericFields").stream().collect(Collectors.joining(", "));
+	                
+	                JOptionPane.showMessageDialog(getContentPane(), 
+	                      "Le ou les champs suivants ne sont pas au format numérique : " + error,
+	                      "Erreur",
+	                      JOptionPane.ERROR_MESSAGE);
+	                
+                }else if(rdbtnCompteCourant.isSelected() && Double.parseDouble(textFieldSoldeInitial.getText()) < Double.parseDouble(textFieldSoldeMinimum.getText())) {
+                	
+	                JOptionPane.showMessageDialog(getContentPane(), 
+		                      "Le solde initial ne peut pas être inférieur au solde minimum autorisé !",
+		                      "Avertissement",
+		                      JOptionPane.WARNING_MESSAGE);
+	                
+                }else if(rdbtnCompteEpargne.isSelected() && Double.parseDouble(textFieldSoldeInitial.getText()) > Double.parseDouble(textFieldPlafond.getText())) {
+                	
+	                JOptionPane.showMessageDialog(getContentPane(), 
+		                      "Le solde initial ne peut pas être supérieur au plafond autorisé !",
+		                      "Avertissement",
+		                      JOptionPane.WARNING_MESSAGE);
+                }
 			}
 		});
 		

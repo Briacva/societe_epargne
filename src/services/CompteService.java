@@ -3,6 +3,11 @@ package services;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
@@ -29,27 +34,51 @@ public class CompteService {
 		form.getTextFieldPlafond().setText(null);
 	}
 	
-	public void checkFillFields(OuvrirCompteForm form) {
+	public Hashtable<String, List<String>> checkFields(OuvrirCompteForm form) {
 		
-		if(form.getTextFieldSoldeInitial().getText().isEmpty()) {
-			form.getTextFieldSoldeInitial().setBorder(BorderFactory.createLineBorder(new Color(139,0, 0), 2));
-			form.getTextFieldSoldeInitial().setBackground(new Color(250,158,114));
-		}
+        // create a new ArrayList
+		Hashtable<String, List<String>> fieldsInError = new Hashtable<String, List<String>>();
 		
-		if(form.getRdbtnCompteCourant().isSelected() && form.getTextFieldSoldeMinimum().getText().isEmpty()) {
-//			form.getLblSoldeMinimimError().setText("Veuillez saisir le champ !");
-		}
-		
-		if(form.getRdbtnCompteCourant().isSelected() && form.getTextFieldFraisDeTransfert().getText().isEmpty()) {
-//			form.getLblFraisDeTransfertError().setText("Veuillez saisir le champ !");
-		}
-		
-		if(form.getRdbtnCompteEpargne().isSelected() && form.getTextFieldTauxInteret().getText().isEmpty()) {
-//			form.getLblTauxInteretError().setText("Veuillez saisir le champ !");
-		}
-		
-		if(form.getRdbtnCompteEpargne().isSelected() && form.getTextFieldPlafond().getText().isEmpty()) {
-//			form.getLblPlafondError().setText("Veuillez saisir le champ !");
-		}
+        List<String> emptyFields = new ArrayList<String>();
+        List<String> badNumericFields = new ArrayList<String>();
+        
+        Hashtable<String, JTextField> listFields = new Hashtable<String, JTextField>();
+        listFields.put("solde initial", form.getTextFieldSoldeInitial());
+        listFields.put("solde minimum", form.getTextFieldSoldeMinimum());
+        listFields.put("frais de transfert", form.getTextFieldFraisDeTransfert());
+        listFields.put("taux d'intéret", form.getTextFieldTauxInteret());
+        listFields.put("plafond", form.getTextFieldPlafond());
+        
+        Set<String> listFieldsKeys = listFields.keySet();
+        
+        for (String key : listFieldsKeys) {
+            if(listFields.get(key).getText().isEmpty()) {
+            	
+            	if(form.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
+                	emptyFields.add(key);
+            	}else if(form.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
+            		emptyFields.add(key);
+            	}else if(key.equals("solde initial")){
+            		emptyFields.add(key);
+            	}
+            	
+            }else {
+            	if(!this.patternMatches(listFields.get(key).getText(), "[+-]?([0-9]*[.])?[0-9]+")) {
+            		badNumericFields.add(key);
+            	}
+            }
+        }
+        
+        fieldsInError.put("emptyFields", emptyFields);
+        fieldsInError.put("badNumericFields", badNumericFields);
+        
+        return fieldsInError;
+        
 	}
+	
+	public boolean patternMatches(String field, String regexPattern) {
+        return Pattern.compile(regexPattern)
+          .matcher((CharSequence) field)
+          .matches();
+    }
 }
