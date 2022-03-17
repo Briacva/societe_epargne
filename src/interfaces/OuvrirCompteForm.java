@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -37,13 +38,6 @@ public class OuvrirCompteForm extends JFrame {
 	private JTextField textFieldFraisDeTransfert;
 	private JTextField textFieldPlafond;
 	private JTextField textFieldTauxInteret;
-	private JLabel lblNumCompteErreur;
-	private JLabel lblRaisonSocialeErreur;
-	private JLabel lblSoldeInitialError;
-	private JLabel lblSoldeMinimimError;
-	private JLabel lblFraisDeTransfertError;
-	private JLabel lblTauxInteretError;
-	private JLabel lblPlafondError;
 	private JRadioButton rdbtnCompteCourant;
 	private JRadioButton rdbtnCompteEpargne;
 	
@@ -73,48 +67,6 @@ public class OuvrirCompteForm extends JFrame {
 		lblBackgroundAccountManagement.setIcon(new ImageIcon(OuvrirCompteForm.class.getResource("/images/backgroundAccountManagement.jpg")));
 		lblBackgroundAccountManagement.setBounds(0, 0, 1200, 700);
 		panel.add(lblBackgroundAccountManagement);
-		
-		lblNumCompteErreur = new JLabel("");
-		lblNumCompteErreur.setForeground(new Color(153, 0, 0));
-		lblNumCompteErreur.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblNumCompteErreur.setBounds(304, 85, 326, 15);
-		subPanelForm.add(lblNumCompteErreur);
-		
-		lblRaisonSocialeErreur = new JLabel("");
-		lblRaisonSocialeErreur.setForeground(new Color(153, 0, 0));
-		lblRaisonSocialeErreur.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblRaisonSocialeErreur.setBounds(304, 140, 326, 15);
-		subPanelForm.add(lblRaisonSocialeErreur);
-		
-		lblSoldeInitialError = new JLabel("");
-		lblSoldeInitialError.setForeground(new Color(153, 0, 0));
-		lblSoldeInitialError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblSoldeInitialError.setBounds(304, 194, 326, 15);
-		subPanelForm.add(lblSoldeInitialError);
-		
-		lblSoldeMinimimError = new JLabel("");
-		lblSoldeMinimimError.setForeground(new Color(153, 0, 0));
-		lblSoldeMinimimError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblSoldeMinimimError.setBounds(304, 295, 326, 15);
-		subPanelForm.add(lblSoldeMinimimError);
-		
-		lblFraisDeTransfertError = new JLabel("");
-		lblFraisDeTransfertError.setForeground(new Color(153, 0, 0));
-		lblFraisDeTransfertError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblFraisDeTransfertError.setBounds(304, 359, 326, 15);
-		subPanelForm.add(lblFraisDeTransfertError);
-		
-		lblTauxInteretError = new JLabel("");
-		lblTauxInteretError.setForeground(new Color(153, 0, 0));
-		lblTauxInteretError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblTauxInteretError.setBounds(304, 420, 326, 15);
-		subPanelForm.add(lblTauxInteretError);
-		
-		lblPlafondError = new JLabel("");
-		lblPlafondError.setForeground(new Color(153, 0, 0));
-		lblPlafondError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblPlafondError.setBounds(304, 485, 326, 15);
-		subPanelForm.add(lblPlafondError);
 		
 		JLabel lblNumCompte = new JLabel("Numéro de compte :");
 		lblNumCompte.setBounds(48, 57, 160, 24);
@@ -327,7 +279,6 @@ public class OuvrirCompteForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 		        Component component = (Component) e.getSource();
 		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
-		        
 		        compteService.checkFillFields(frame);
 			}
 		});
@@ -389,33 +340,5 @@ public class OuvrirCompteForm extends JFrame {
 
 	public JRadioButton getRdbtnCompteEpargne() {
 		return rdbtnCompteEpargne;
-	}
-	
-	public JLabel getLblNumCompteErreur() {
-		return lblNumCompteErreur;
-	}
-
-	public JLabel getLblRaisonSocialeErreur() {
-		return lblRaisonSocialeErreur;
-	}
-
-	public JLabel getLblSoldeInitialError() {
-		return lblSoldeInitialError;
-	}
-
-	public JLabel getLblSoldeMinimimError() {
-		return lblSoldeMinimimError;
-	}
-
-	public JLabel getLblFraisDeTransfertError() {
-		return lblFraisDeTransfertError;
-	}
-
-	public JLabel getLblTauxInteretError() {
-		return lblTauxInteretError;
-	}
-
-	public JLabel getLblPlafondError() {
-		return lblPlafondError;
 	}
 }
