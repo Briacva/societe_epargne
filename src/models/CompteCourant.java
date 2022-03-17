@@ -24,7 +24,7 @@ public class CompteCourant extends Compte{
 	 * @param fraisTransfert
 	 */
 	public CompteCourant(int id, int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte, float soldeMinimum, float fraisTransfert) {
-		super(id, numCompte, solde, soldeInitial, cloture, typeCompte);
+		super(/*id, */numCompte, solde, soldeInitial, cloture, typeCompte);
 		this.soldeMinimum = soldeMinimum;
 		this.fraisTransfert = fraisTransfert;
 	}

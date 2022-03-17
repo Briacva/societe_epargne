@@ -13,6 +13,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 import interfaces.OuvrirCompteForm;
+import models.CompteCourant;
+import models.TypeCompte;
 
 public class CompteService {
 	public void generateNumCompte(JTextField input) {
@@ -47,7 +49,7 @@ public class CompteService {
 		// initialisation d'une liste contenant les libellés des champs non saisis
         List<String> emptyFields = new ArrayList<String>();
         
-        // initialisation d'une liste contenant les libellés des champs mal saisi (format numérique)
+        // initialisation d'une liste contenant les libellés des champs mal saisis (format numérique)
         List<String> badNumericFields = new ArrayList<String>();
         
         // initialisation d'un tableau associatif contenant les libellés et la valeur des champs du formulaire
@@ -104,4 +106,10 @@ public class CompteService {
           .matcher((CharSequence) field)
           .matches();
     }
+
+	public void createBankAccount(OuvrirCompteForm form) {
+		// TODO Auto-generated method stub
+		
+		int numCompte = Integer.parseInt(form.getTextFieldNumCompte().getText());
+	}
 }

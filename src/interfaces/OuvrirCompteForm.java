@@ -323,7 +323,15 @@ public class OuvrirCompteForm extends JFrame {
 		                      "Le solde initial ne peut pas être supérieur au plafond autorisé !",
 		                      "Avertissement",
 		                      JOptionPane.WARNING_MESSAGE);
-                }
+                }else if(rdbtnCompteEpargne.isSelected() && (Double.parseDouble(textFieldSoldeInitial.getText()) > 100000 || Double.parseDouble(textFieldPlafond.getText()) > 100000)) {
+                	JOptionPane.showMessageDialog(getContentPane(), 
+		                      "La valeur maximal des champs solde initial et plafond ne peut pas excéder 100000 !",
+		                      "Avertissement",
+		                      JOptionPane.WARNING_MESSAGE);
+                }else {
+                	//vérifier que le champ taux d'intérêt est pas supérieur à 100
+                	compteService.createBankAccount(frame);
+                }		        
 			}
 		});
 		

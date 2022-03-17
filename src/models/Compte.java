@@ -15,8 +15,8 @@ public class Compte {
 	protected boolean cloture;
 	protected boolean typeCompte;
 	
-	public Compte(int id, int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte) {
-		this.id = id;
+	public Compte(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte) {
+//		this.id = id;
 		this.numCompte = numCompte;
 		this.solde = solde;
 		this.soldeInitial = soldeInitial;
