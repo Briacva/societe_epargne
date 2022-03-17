@@ -282,10 +282,14 @@ public class OuvrirCompteForm extends JFrame {
 		JButton btnCreer = new JButton("Créer");
 		btnCreer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Récupération de l'interface
 		        Component component = (Component) e.getSource();
 		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+		        
+		        // alimentation du tableau des erreurs
 		        Hashtable<String, List<String>> errors = compteService.checkFields(frame);
 		        
+		        // si il y a plusieurs champs non saisis
 		        if((errors.get("emptyFields").size() > 0)) {
 		        	
 	                String error = errors.get("emptyFields").stream().collect(Collectors.joining(", "));
@@ -294,7 +298,7 @@ public class OuvrirCompteForm extends JFrame {
 	                      "Veuillez saisir le ou les champs suivants : " + error,
 	                      "Erreur",
 	                      JOptionPane.ERROR_MESSAGE);
-	                
+	            // sinon si les champs ne sont pas numériques    
                 }else if(errors.get("emptyFields").size() == 0 && errors.get("badNumericFields").size() > 0) {
                 	
 	                String error = errors.get("badNumericFields").stream().collect(Collectors.joining(", "));
@@ -303,14 +307,14 @@ public class OuvrirCompteForm extends JFrame {
 	                      "Le ou les champs suivants ne sont pas au format numérique : " + error,
 	                      "Erreur",
 	                      JOptionPane.ERROR_MESSAGE);
-	                
+	            // sinon le champ solde initial est-il inférieur au champ soolde minimum
                 }else if(rdbtnCompteCourant.isSelected() && Double.parseDouble(textFieldSoldeInitial.getText()) < Double.parseDouble(textFieldSoldeMinimum.getText())) {
                 	
 	                JOptionPane.showMessageDialog(getContentPane(), 
 		                      "Le solde initial ne peut pas être inférieur au solde minimum autorisé !",
 		                      "Avertissement",
 		                      JOptionPane.WARNING_MESSAGE);
-	                
+	            //sinon si le champ solde initial est-il supérieur au champ plafond    
                 }else if(rdbtnCompteEpargne.isSelected() && Double.parseDouble(textFieldSoldeInitial.getText()) > Double.parseDouble(textFieldPlafond.getText())) {
                 	
 	                JOptionPane.showMessageDialog(getContentPane(), 
