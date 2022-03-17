@@ -101,7 +101,7 @@ public class OuvrirCompteForm extends JFrame {
 		lblFraisDeTransfertError = new JLabel("");
 		lblFraisDeTransfertError.setForeground(new Color(153, 0, 0));
 		lblFraisDeTransfertError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblFraisDeTransfertError.setBounds(304, 360, 326, 15);
+		lblFraisDeTransfertError.setBounds(304, 359, 326, 15);
 		subPanelForm.add(lblFraisDeTransfertError);
 		
 		lblTauxInteretError = new JLabel("");
@@ -113,7 +113,7 @@ public class OuvrirCompteForm extends JFrame {
 		lblPlafondError = new JLabel("");
 		lblPlafondError.setForeground(new Color(153, 0, 0));
 		lblPlafondError.setFont(new Font("Dialog", Font.PLAIN, 9));
-		lblPlafondError.setBounds(304, 487, 326, 15);
+		lblPlafondError.setBounds(304, 485, 326, 15);
 		subPanelForm.add(lblPlafondError);
 		
 		JLabel lblNumCompte = new JLabel("Numéro de compte :");
