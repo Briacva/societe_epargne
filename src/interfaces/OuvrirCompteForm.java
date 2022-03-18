@@ -1,8 +1,6 @@
 package interfaces;
 
 import java.awt.Dimension;
-import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -21,8 +19,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
-import java.awt.TextField;
-
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -30,6 +26,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class OuvrirCompteForm extends JFrame {
 	/**
@@ -74,92 +71,92 @@ public class OuvrirCompteForm extends JFrame {
 		panel.add(lblBackgroundAccountManagement);
 		
 		JLabel lblNumCompte = new JLabel("Numéro de compte :");
-		lblNumCompte.setBounds(48, 57, 160, 24);
+		lblNumCompte.setBounds(51, 81, 160, 24);
 		subPanelForm.add(lblNumCompte);
 		
 		JLabel lblTauxInteret = new JLabel("Taux d'intérêt* :");
-		lblTauxInteret.setBounds(48, 391, 160, 24);
+		lblTauxInteret.setBounds(51, 415, 160, 24);
 		subPanelForm.add(lblTauxInteret);
 		
 		JLabel lblPlafond = new JLabel("Plafond* :");
-		lblPlafond.setBounds(48, 455, 160, 24);
+		lblPlafond.setBounds(51, 479, 160, 24);
 		subPanelForm.add(lblPlafond);
 		
 		JLabel lblTypeDeCompe = new JLabel("Type de compe* :");
-		lblTypeDeCompe.setBounds(48, 212, 160, 24);
+		lblTypeDeCompe.setBounds(51, 236, 160, 24);
 		subPanelForm.add(lblTypeDeCompe);
 		
 		JLabel lblRaisonSociale = new JLabel("Raison sociale :");
 		lblRaisonSociale.setBackground(SystemColor.desktop);
-		lblRaisonSociale.setBounds(48, 111, 160, 24);
+		lblRaisonSociale.setBounds(51, 135, 160, 24);
 		subPanelForm.add(lblRaisonSociale);
 		
 		JLabel lblFraisDeTransfert = new JLabel("Frais de transfert* :");
-		lblFraisDeTransfert.setBounds(48, 329, 160, 24);
+		lblFraisDeTransfert.setBounds(51, 353, 160, 24);
 		subPanelForm.add(lblFraisDeTransfert);
 		
 		JSeparator separatorNumCompte = new JSeparator();
 		separatorNumCompte.setBackground(SystemColor.desktop);
 		separatorNumCompte.setForeground(new Color(0, 102, 102));
-		separatorNumCompte.setBounds(48, 80, 60, 15);
+		separatorNumCompte.setBounds(51, 104, 60, 15);
 		subPanelForm.add(separatorNumCompte);
 		
 		JLabel lblsoldeInitial = new JLabel("Solde initial* :");
 		lblsoldeInitial.setBackground(SystemColor.desktop);
-		lblsoldeInitial.setBounds(48, 165, 160, 24);
+		lblsoldeInitial.setBounds(51, 189, 160, 24);
 		subPanelForm.add(lblsoldeInitial);
 		
 		JLabel lblSoldeMinimum = new JLabel("Solde minimum* :");
-		lblSoldeMinimum.setBounds(48, 267, 160, 24);
+		lblSoldeMinimum.setBounds(51, 291, 160, 24);
 		subPanelForm.add(lblSoldeMinimum);
 		
 		JSeparator separatorPlafond = new JSeparator();
 		separatorPlafond.setForeground(new Color(0, 102, 102));
 		separatorPlafond.setBackground(SystemColor.desktop);
-		separatorPlafond.setBounds(48, 480, 60, 15);
+		separatorPlafond.setBounds(51, 504, 60, 15);
 		subPanelForm.add(separatorPlafond);
 		
 		JSeparator separatorTauxInteret = new JSeparator();
 		separatorTauxInteret.setForeground(new Color(0, 102, 102));
 		separatorTauxInteret.setBackground(SystemColor.desktop);
-		separatorTauxInteret.setBounds(48, 415, 60, 15);
+		separatorTauxInteret.setBounds(51, 439, 60, 15);
 		subPanelForm.add(separatorTauxInteret);
 		
 		JSeparator separatorSoldeInitial = new JSeparator();
 		separatorSoldeInitial.setBackground(SystemColor.desktop);
 		separatorSoldeInitial.setForeground(new Color(0, 102, 102));
-		separatorSoldeInitial.setBounds(48, 188, 60, 15);
+		separatorSoldeInitial.setBounds(51, 212, 60, 15);
 		subPanelForm.add(separatorSoldeInitial);
 		
 		JSeparator separatorRaisonSociale = new JSeparator();
 		separatorRaisonSociale.setForeground(new Color(0, 102, 102));
 		separatorRaisonSociale.setBackground(SystemColor.desktop);
-		separatorRaisonSociale.setBounds(48, 134, 60, 15);
+		separatorRaisonSociale.setBounds(51, 158, 60, 15);
 		subPanelForm.add(separatorRaisonSociale);
 		
 		JSeparator separatorFraisDeTransfert = new JSeparator();
 		separatorFraisDeTransfert.setForeground(new Color(0, 102, 102));
 		separatorFraisDeTransfert.setBackground(SystemColor.desktop);
-		separatorFraisDeTransfert.setBounds(48, 353, 60, 15);
+		separatorFraisDeTransfert.setBounds(51, 377, 60, 15);
 		subPanelForm.add(separatorFraisDeTransfert);
 		
 		JSeparator separatorSoldeMinimum = new JSeparator();
 		separatorSoldeMinimum.setBackground(SystemColor.desktop);
 		separatorSoldeMinimum.setForeground(new Color(0, 102, 102));
-		separatorSoldeMinimum.setBounds(48, 291, 60, 15);
+		separatorSoldeMinimum.setBounds(51, 315, 60, 15);
 		subPanelForm.add(separatorSoldeMinimum);
 		
 		JSeparator separatorTypeCompte = new JSeparator();
 		separatorTypeCompte.setForeground(new Color(0, 102, 102));
 		separatorTypeCompte.setBackground(SystemColor.desktop);
-		separatorTypeCompte.setBounds(48, 237, 60, 15);
+		separatorTypeCompte.setBounds(51, 261, 60, 15);
 		subPanelForm.add(separatorTypeCompte);
 		
 		textFieldNumCompte = new JTextField();
 		textFieldNumCompte.setForeground(Color.WHITE);
 		textFieldNumCompte.setEditable(false);
 		textFieldNumCompte.setBackground(new Color(51, 102, 102));
-		textFieldNumCompte.setBounds(304, 53, 326, 33);
+		textFieldNumCompte.setBounds(307, 77, 326, 33);
 		textFieldNumCompte.setBorder(null);
 		subPanelForm.add(textFieldNumCompte);
 		textFieldNumCompte.setColumns(10);
@@ -173,14 +170,14 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldRaisonSociale.setColumns(10);
 		textFieldRaisonSociale.setBorder(null);
 		textFieldRaisonSociale.setBackground(new Color(51, 102, 102));
-		textFieldRaisonSociale.setBounds(304, 107, 326, 33);
+		textFieldRaisonSociale.setBounds(307, 131, 326, 33);
 		subPanelForm.add(textFieldRaisonSociale);
 		
 		textFieldSoldeInitial = new JTextField();
 		textFieldSoldeInitial.setForeground(Color.WHITE);
 		textFieldSoldeInitial.setColumns(10);
 		textFieldSoldeInitial.setBackground(new Color(51, 102, 102));
-		textFieldSoldeInitial.setBounds(304, 161, 326, 33);
+		textFieldSoldeInitial.setBounds(307, 185, 326, 33);
 		textFieldSoldeInitial.setBorder(null);
 		subPanelForm.add(textFieldSoldeInitial);
 		
@@ -188,7 +185,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldSoldeMinimum.setForeground(Color.WHITE);
 		textFieldSoldeMinimum.setColumns(10);
 		textFieldSoldeMinimum.setBackground(new Color(51, 102, 102));
-		textFieldSoldeMinimum.setBounds(304, 263, 326, 33);
+		textFieldSoldeMinimum.setBounds(307, 287, 326, 33);
 		textFieldSoldeMinimum.setBorder(null);
 		subPanelForm.add(textFieldSoldeMinimum);
 		
@@ -197,7 +194,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldFraisDeTransfert.setColumns(10);
 		textFieldFraisDeTransfert.setBorder(null);
 		textFieldFraisDeTransfert.setBackground(new Color(51, 102, 102));
-		textFieldFraisDeTransfert.setBounds(304, 325, 326, 33);
+		textFieldFraisDeTransfert.setBounds(307, 349, 326, 33);
 		subPanelForm.add(textFieldFraisDeTransfert);
 		
 		textFieldPlafond = new JTextField();
@@ -206,7 +203,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldPlafond.setBorder(null);
 		textFieldPlafond.setEditable(false);
 		textFieldPlafond.setBackground(new Color(26, 53, 53));
-		textFieldPlafond.setBounds(304, 451, 326, 33);
+		textFieldPlafond.setBounds(307, 475, 326, 33);
 		subPanelForm.add(textFieldPlafond);
 		
 		textFieldTauxInteret = new JTextField();
@@ -215,7 +212,7 @@ public class OuvrirCompteForm extends JFrame {
 		textFieldTauxInteret.setBorder(null);
 		textFieldTauxInteret.setEditable(false);
 		textFieldTauxInteret.setBackground(new Color(26, 53, 53));
-		textFieldTauxInteret.setBounds(304, 387, 326, 33);
+		textFieldTauxInteret.setBounds(307, 411, 326, 33);
 		subPanelForm.add(textFieldTauxInteret);
 		
 		ButtonGroup radioButtonGroup = new ButtonGroup();
@@ -223,7 +220,7 @@ public class OuvrirCompteForm extends JFrame {
 		rdbtnCompteCourant = new JRadioButton("Courant");
 		rdbtnCompteCourant.setBackground(new Color(0, 0, 0, 0));
 		rdbtnCompteCourant.setSelected(true);
-		rdbtnCompteCourant.setBounds(306, 206, 160, 39);
+		rdbtnCompteCourant.setBounds(309, 230, 160, 39);
 		rdbtnCompteCourant.addActionListener(new ActionListener() {
 			
 			@Override
@@ -250,7 +247,7 @@ public class OuvrirCompteForm extends JFrame {
 		
 		rdbtnCompteEpargne = new JRadioButton("Epargne");
 		rdbtnCompteEpargne.setBackground(new Color(0, 0, 0, 0));
-		rdbtnCompteEpargne.setBounds(470, 206, 160, 39);
+		rdbtnCompteEpargne.setBounds(473, 230, 160, 39);
 		rdbtnCompteEpargne.addActionListener(new ActionListener() {
 			
 			@Override
@@ -376,6 +373,23 @@ public class OuvrirCompteForm extends JFrame {
 		btnRetour.setBackground(new Color(30, 125, 125));
 		btnRetour.setBounds(48, 541, 133, 33);
 		subPanelForm.add(btnRetour);
+		
+		JComboBox<String> comboBoxClients = new JComboBox<String>();
+		comboBoxClients.setForeground(Color.WHITE);
+		comboBoxClients.setBackground(SystemColor.desktop);
+		comboBoxClients.setBounds(307, 24, 326, 33);
+		compteService.fillListClients(comboBoxClients);
+		subPanelForm.add(comboBoxClients);
+		
+		JLabel lblClients = new JLabel("Sélectionnez un client :");
+		lblClients.setBounds(51, 24, 193, 24);
+		subPanelForm.add(lblClients);
+		
+		JSeparator separatorClients = new JSeparator();
+		separatorClients.setForeground(new Color(0, 102, 102));
+		separatorClients.setBackground(SystemColor.desktop);
+		separatorClients.setBounds(51, 47, 60, 15);
+		subPanelForm.add(separatorClients);
 		
 		pack();
 	}

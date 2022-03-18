@@ -5,17 +5,22 @@ import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.swing.ComboBoxEditor;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import interfaces.OuvrirCompteForm;
 import main.DatabaseConnexion;
+import models.Client;
 import models.Compte;
 import models.CompteCourant;
 import models.CompteEpargne;
@@ -25,9 +30,11 @@ import models.TypeCompte;
 public class CompteService {
 	
 	private DatabaseConnexion app;
+	private ClientService clientService;
 	
 	public CompteService() {
 		this.app = new DatabaseConnexion();
+		this.clientService = new ClientService();
 	}
 	
 	public DatabaseConnexion getApp() {
@@ -251,6 +258,7 @@ public class CompteService {
 	
 	public int getLastCompte(int numCompte) {
 		Integer id = null;
+		
 		try {
 			String query = "SELECT MAX(id) FROM Compte WHERE numeroCompte = " + numCompte;
 			Connection conn = this.app.connect();
@@ -266,6 +274,11 @@ public class CompteService {
 			e.printStackTrace();
 		}
 		
-;		return id;
+		return id;
+	}
+	
+	public void fillListClients(JComboBox<String> list) {
+		List<Object> clients = clientService.getAll();
+		
 	}
 }
