@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import main.DatabaseConnexion;
@@ -34,20 +35,21 @@ public class ClientService {
 			
 			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
 				while (rs.next()) {
-					ResultSetMetaData rsmd = rs.getMetaData();
-					int columnsNumber = rsmd.getColumnCount();
 					
 					Object client = new Object()
 					{ 
-						int id = 0;
-						String libelleClient = "Firstname";
+						int id = rs.getInt("id");
+						String raisonSociale = rs.getString("raisonSociale");
+						String libelleClient = rs.getString("libelleClient");
+						String numeroTel = rs.getString("numeroTel");
+						String adresse = rs.getString("adresse");
+						String civilite = rs.getString("civilite");
+						Date dateNaissance = rs.getDate("dateNaissance");
+						int idConseiller = rs.getInt("id_Conseiller");
 					};
 					
-					for (int i = 1; i <= columnsNumber; i++) {
-						if (i > 1) System.out.print(",  ");
-						String columnValue = rs.getString(i);
-						System.out.print(columnValue + " " + rsmd.getColumnName(i));
-					}
+					list.add(client);
+					
 				}
 			}else {
 				System.out.println("\nAucune donnée n'a été trouvé.");

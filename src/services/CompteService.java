@@ -280,5 +280,9 @@ public class CompteService {
 	public void fillListClients(JComboBox<String> list) {
 		List<Object> clients = clientService.getAll();
 		
+		for(Object client: clients) {
+//			list.addItem(client)
+//			System.out.println(client);
+		}
 	}
 }
