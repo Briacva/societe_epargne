@@ -21,8 +21,8 @@ public class CompteEpargne extends Compte{
 	 * @param plafond
 	 * @param tauxInteret
 	 */
-	public CompteEpargne(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte, float plafond, float tauxInteret) {
-		super(/*id, */numCompte, solde, soldeInitial, cloture, typeCompte);
+	public CompteEpargne(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte, int idClient, float plafond, float tauxInteret) {
+		super(/*id, */numCompte, solde, soldeInitial, cloture, typeCompte, idClient);
 		this.plafond = plafond;
 		this.tauxInteret = tauxInteret;
 	}

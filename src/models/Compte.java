@@ -14,16 +14,18 @@ public class Compte {
 	protected float soldeInitial;
 	protected boolean cloture;
 	protected boolean typeCompte;
+	protected int idClient;
 	
-	public Compte(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte) {
+	public Compte(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte, int idClient) {
 //		this.id = id;
 		this.numCompte = numCompte;
 		this.solde = solde;
 		this.soldeInitial = soldeInitial;
 		this.cloture = cloture;
 		this.typeCompte = typeCompte;
+		this.idClient = idClient;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -56,7 +58,7 @@ public class Compte {
 		this.soldeInitial = soldeInitial;
 	}
 
-	public boolean isCloture() {
+	public boolean getCloture() {
 		return cloture;
 	}
 
@@ -64,11 +66,19 @@ public class Compte {
 		this.cloture = cloture;
 	}
 
-	public boolean isTypeCompte() {
+	public boolean getTypeCompte() {
 		return typeCompte;
 	}
 
 	public void setTypeCompte(boolean typeCompte) {
 		this.typeCompte = typeCompte;
+	}
+	
+	public int getIdClient() {
+		return idClient;
+	}
+
+	public void setIdClient(int idClient) {
+		this.idClient = idClient;
 	}
 }

@@ -328,9 +328,27 @@ public class OuvrirCompteForm extends JFrame {
 		                      "La valeur maximal des champs solde initial et plafond ne peut pas excéder 100000 !",
 		                      "Avertissement",
 		                      JOptionPane.WARNING_MESSAGE);
-                }else {
+                }else if(rdbtnCompteEpargne.isSelected() && (Double.parseDouble(textFieldTauxInteret.getText()) > 100)) {
+                	JOptionPane.showMessageDialog(getContentPane(), 
+		                      "Le taux d'intérêt ne peut pas excéder 100% !",
+		                      "Avertissement",
+		                      JOptionPane.WARNING_MESSAGE);
+                }
+                else {
                 	//vérifier que le champ taux d'intérêt est pas supérieur à 100
-                	compteService.createBankAccount(frame);
+                	if(compteService.createBankAccount(frame)){
+                    	JOptionPane.showMessageDialog(getContentPane(), 
+  		                      "Le compte a bien été créé.",
+  		                      "Information",
+  		                      JOptionPane.INFORMATION_MESSAGE);
+                    	
+                    	compteService.fieldReinitialization(frame);
+                	}else {
+                    	JOptionPane.showMessageDialog(getContentPane(), 
+    		                      "Une erreur s'est produite, le compte n'a pas été enregistré !",
+    		                      "Erreur",
+    		                      JOptionPane.ERROR_MESSAGE);
+                	}
                 }		        
 			}
 		});

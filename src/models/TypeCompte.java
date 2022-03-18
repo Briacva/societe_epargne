@@ -3,20 +3,20 @@ package models;
 public enum TypeCompte {
     // This will call enum constructor with one
     // int argument
-    COURANT(0), 
-    EPARGNE(1);
+    COURANT(false), 
+    EPARGNE(true);
     
     // declaring private variable for getting values
-    private int type;
+    private boolean type;
     
     // getter method
-    public int getType()
+    public boolean getType()
     {
         return this.type;
     }
     
     // enum constructor - cannot be public or protected
-    private TypeCompte(int type)
+    private TypeCompte(boolean type)
     {
         this.type= type;
     }
