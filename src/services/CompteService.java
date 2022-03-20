@@ -1,5 +1,6 @@
 package services;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -277,12 +278,20 @@ public class CompteService {
 		return id;
 	}
 	
-	public void fillListClients(JComboBox<String> list) {
+	public boolean fillListClients(JComboBox<String> list) {
+		boolean error = false;
 		List<Object> clients = clientService.getAll();
 		
-		for(Object client: clients) {
-//			list.addItem(client)
-//			System.out.println(client);
+		try {
+			for(Object client: clients) {
+				Field field = client.getClass().getDeclaredField("libelleClient");
+				String value = field.get(client).toString();
+			}
+		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+			error = true;
 		}
+		
+		return error;
 	}
 }
