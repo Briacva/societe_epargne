@@ -40,7 +40,8 @@ public class ClientService {
 		form.getNameText().setText(null);
 		form.getFirstnameText().setText(null);
 		form.getEmailText().setText(null);
-		form.getCiviliteText().setText(null);
+		form.getPhoneText().setText(null);
+		form.getCiviliteText().setSelectedIndex(0);
 		form.getAdressText().setText(null);
 	}
 	
@@ -56,12 +57,12 @@ public class ClientService {
 		List<String> fieldsInError = new ArrayList<String>();
 		
 		Hashtable<String,String> listFields = new Hashtable<String,String>();
-		listFields.put("Raison sociale", form.getSocialReason().getText());
-		listFields.put("Prénom", form.getNameText().getText());
-		listFields.put("Nom", form.getFirstnameText().getText());
-		listFields.put("Email", form.getEmailText().getText());
-		listFields.put("Civilité", form.getCiviliteText().getText());
-		listFields.put("Adresse", form.getAdressText().getText());
+		listFields.put("raison sociale", form.getSocialReason().getText());
+		listFields.put("prénom", form.getNameText().getText());
+		listFields.put("nom", form.getFirstnameText().getText());
+		listFields.put("téléphone", form.getPhoneText().getText());
+		listFields.put("email", form.getEmailText().getText());
+		listFields.put("adresse", form.getAdressText().getText());
 		
 		Set<String> listFieldsKeys = listFields.keySet();
 		
@@ -71,14 +72,14 @@ public class ClientService {
         	}
         }
         
-        if(listFields.get("Raison sociale").isEmpty() && (!listFields.get("Nom").isEmpty() && !listFields.get("Pr�nom").isEmpty())) {
-        	fieldsInError.remove("Raison sociale");
-        	fieldsInError.remove("Nom");
-        	fieldsInError.remove("Prénom");
-        }else if(!listFields.get("Raison sociale").isEmpty() && (listFields.get("Nom").isEmpty() && listFields.get("Pr�nom").isEmpty())) {
-        	fieldsInError.remove("Raison sociale");
-        	fieldsInError.remove("Nom");
-        	fieldsInError.remove("Prénom");
+        if(listFields.get("raison sociale").isEmpty() && (!listFields.get("nom").isEmpty() && !listFields.get("prénom").isEmpty())) {
+        	fieldsInError.remove("raison sociale");
+        	fieldsInError.remove("nom");
+        	fieldsInError.remove("prénom");
+        }else if(!listFields.get("raison sociale").isEmpty() && (listFields.get("nom").isEmpty() && listFields.get("prénom").isEmpty())) {
+        	fieldsInError.remove("raison sociale");
+        	fieldsInError.remove("nom");
+        	fieldsInError.remove("prénom");
         }
         
 		return fieldsInError;

@@ -14,9 +14,9 @@ import models.Client;
  *
  */
 public class DatabaseConnexion {
-    private final static String url = "jdbc:mysql://localhost:3307/societe_epargne";
+    private final static String url = "jdbc:mysql://localhost:3306/societe_epargne";
     private final static String user = "root";
-    private final static String password = "";
+    private final static String password = "password";
 
     /**
      * Connect to the Mysql database
@@ -38,8 +38,8 @@ public class DatabaseConnexion {
     
     public static void Update(Client client) {
     	try {
-    		String query = "INSERT INTO client (`raisonSociale`,`libelleClient`,`numeroTel`,`mail`,`adresse`,`civilite`,`id_Conseiller`) VALUES ('"+client.getRaisonSocial()+"', '"+client.getLibelleClient()+"', '"+client.getTelephone()+"', '"+client.getMail()+"', '"+client.getAdresse()+"' , '"+client.getCivilite()+"', "+client.getId_Conseille()+")";
-    		
+    		String query = "INSERT INTO Client (`raisonSociale`,`libelleClient`,`numeroTel`,`mail`,`adresse`,`civilite`,`id_Conseiller`) VALUES ('"+client.getRaisonSocial()+"', '"+client.getLibelleClient()+"', '"+client.getTelephone()+"', '"+client.getMail()+"', '"+client.getAdresse()+"' , '"+client.getCivilite()+"', "+client.getId_Conseille()+")";
+    		System.out.println(query);
     		DatabaseConnexion app = new DatabaseConnexion();
     		Connection conn = app.connect();
     		

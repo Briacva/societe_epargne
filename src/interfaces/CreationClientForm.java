@@ -2,19 +2,18 @@ package interfaces;
 import javax.swing.JFrame;
 
 import services.ClientService;
-import java.util.regex.*;
-
 import javax.swing.*;
 import javax.swing.text.*;
 
 import main.DatabaseConnexion;
-import main.DbInsert;
 import models.Client;
+import models.TypeCivilite;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
@@ -25,6 +24,10 @@ import javax.swing.JOptionPane;
 public class CreationClientForm extends JFrame {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public JTextField getSocialReason() {
 		return socialReason;
 	}
@@ -41,28 +44,30 @@ public class CreationClientForm extends JFrame {
 		return EmailText;
 	}
 
-	public JTextField getPhonefield() {
+	public JTextField getAdressText() {
 		return adressText;
 	}
 
-	public JTextField getCiviliteText() {
-		return civiliteText;
-	}
-
-	public JTextField getAdressText() {
+	public JTextField getPhoneText() {
 		return phoneTextField;
+	}
+	
+	public JComboBox<String> getCiviliteText() {
+		return civiliteText;
 	}
 
 	private JTextField socialReason;
 	private JTextField NameText;
 	private JTextField firstnameText;
 	private JTextField EmailText;
-	private JTextField civiliteText;
+	private JComboBox<String> civiliteText;
 	private JTextField adressText;
 	private JTextField phoneTextField;
+
 	public String toStringLibelleClient(){
 		return this.NameText.getText()+" "+ this.firstnameText.getText();
 	}
+	
 	public CreationClientForm() {
 		getContentPane().setForeground(new Color(0, 255, 0));
 		setTitle("Societe d'epargne");
@@ -122,10 +127,12 @@ public class CreationClientForm extends JFrame {
 		lblEmail.setBounds(326, 460, 201, 30);
 		getContentPane().add(lblEmail);
 		
-		civiliteText = new JTextField();
+		civiliteText = new JComboBox();
 		civiliteText.setBounds(575, 214, 300, 30);
+		civiliteText.addItem("");
+		civiliteText.addItem(TypeCivilite.HOMME.getType());
+		civiliteText.addItem(TypeCivilite.FEMME.getType());
 		getContentPane().add(civiliteText);
-		civiliteText.setDocument(new LimitJTextField(50));
 		
 		JLabel lblNewLabel_1_5 = new JLabel("Civilite :");
 		lblNewLabel_1_5.setForeground(Color.decode("#395B64"));
@@ -170,11 +177,14 @@ public class CreationClientForm extends JFrame {
                	         " Erreur ",
                	         JOptionPane.ERROR_MESSAGE);
                 } else {
-                	Client client = new Client(socialReason.getText(), toStringLibelleClient(), phoneTextField.getText() , EmailText.getText(), adressText.getText(), civiliteText.getText(),null, 1 );
+                	Client client = new Client(socialReason.getText(), toStringLibelleClient(), phoneTextField.getText() , EmailText.getText(), adressText.getText(), civiliteText.getSelectedItem().toString(),null, 1 );
                 	DatabaseConnexion.Update(client);
+                	ClientService.fieldReinitialization(frame);
+                	OuvrirCompteForm formAccount = new OuvrirCompteForm();
+                	formAccount.setVisible(true);
+                	frame.dispose();
                 	System.out.println("it's ok");
-                
-;                }
+            	}
             }
         });
 		
@@ -226,7 +236,7 @@ public class CreationClientForm extends JFrame {
 	}
 	
 	
-	//limite la longueur des zones de textes en charactères
+	//limite la longueur des zones de textes en charactï¿½res
 	
 	public class LimitJTextField extends PlainDocument 
 	{
@@ -244,13 +254,4 @@ public class CreationClientForm extends JFrame {
 	   }
 	}
 }
-
-
-
-//
-//private static void clearFileds() {
-//	JTextArea.setText("");
-//	btnReinitialiser.clearSelection();
-//	
-//}
 
