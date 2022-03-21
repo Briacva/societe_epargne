@@ -292,8 +292,8 @@ public class CompteService {
 				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
 				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
 				
-				form.getListClients().put(id, libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxClients().addItem(libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListClients().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxClients().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
 		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
