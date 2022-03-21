@@ -12,8 +12,6 @@ public class Program {
 		CreationClientForm NewClientForm = new CreationClientForm();
 		DatabaseConnexion dbconnection =  new DatabaseConnexion();
 		dbconnection.connect();
-		
-
 	}
 
 }
