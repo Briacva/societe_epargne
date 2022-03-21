@@ -5,12 +5,8 @@ package main;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import com.mysql.cj.Query;
-
 import models.Client;
 
 /**
@@ -21,31 +17,22 @@ public class DatabaseConnexion {
     private final static String url = "jdbc:mysql://localhost:3307/societe_epargne";
     private final static String user = "root";
     private final static String password = "";
-    
-    static Connection conn;
-    static Statement myStat;
-    static ResultSet myRs;
-    static Query query;
 
     /**
      * Connect to the Mysql database
+     *
+     * @return a Connection object
      */
-    public static void connect() {
-        
+    public Connection connect() {
+        Connection conn = null;
         try {
-        	conn = DriverManager.getConnection(url, user, password);
-        	myStat = conn.createStatement();
-            myRs = myStat.executeQuery("SELECT * FROM client");
+            conn = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to the mysql server successfully.");
-            
-            while(myRs.next()) {
-            	System.out.println(myRs.getString("adresse"));
-//            	System.out.println(myRs.getString("Theme"));
-            	
-            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return conn;
     }
     
     
@@ -53,8 +40,11 @@ public class DatabaseConnexion {
     	try {
     		String query = "INSERT INTO client (`raisonSociale`,`libelleClient`,`numeroTel`,`mail`,`adresse`,`civilite`,`id_Conseiller`) VALUES ('"+client.getRaisonSocial()+"', '"+client.getLibelleClient()+"', '"+client.getTelephone()+"', '"+client.getMail()+"', '"+client.getAdresse()+"' , '"+client.getCivilite()+"', "+client.getId_Conseille()+")";
     		
-
-    		myStat.executeUpdate(query);
+    		DatabaseConnexion app = new DatabaseConnexion();
+    		Connection conn = app.connect();
+    		
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.executeUpdate(query);
     		
     	} catch (SQLException e) {
     		System.out.println(e.getMessage());
