@@ -398,9 +398,7 @@ public class OuvrirCompteForm extends JFrame {
 		comboBoxClients.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        String client = listClients.get(getListClientKey(comboBoxClients.getSelectedItem().toString()));
-		        System.out.println(client);
 		        String[] parts = client.split(" - ");
-		        System.out.println(parts);
 		        String libelleClient = parts[0];
 		    	textFieldRaisonSociale.setText(libelleClient);
 		    }
