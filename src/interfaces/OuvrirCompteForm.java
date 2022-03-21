@@ -22,8 +22,10 @@ import java.awt.SystemColor;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -42,6 +44,9 @@ public class OuvrirCompteForm extends JFrame {
 	private JTextField textFieldTauxInteret;
 	private JRadioButton rdbtnCompteCourant;
 	private JRadioButton rdbtnCompteEpargne;
+	private JComboBox<String> comboBoxClients;
+
+	private Hashtable<Integer, String> listClients = new Hashtable<Integer, String>();
 	
 	public OuvrirCompteForm() {
 		// Instanciation du CompteService
@@ -340,6 +345,8 @@ public class OuvrirCompteForm extends JFrame {
   		                      JOptionPane.INFORMATION_MESSAGE);
                     	
                     	compteService.fieldReinitialization(frame);
+                    	comboBoxClients.setSelectedIndex(0);
+                    	compteService.generateNumCompte(textFieldNumCompte);
                 	}else {
                     	JOptionPane.showMessageDialog(getContentPane(), 
     		                      "Une erreur s'est produite, le compte n'a pas été enregistré !",
@@ -374,11 +381,31 @@ public class OuvrirCompteForm extends JFrame {
 		btnRetour.setBounds(48, 541, 133, 33);
 		subPanelForm.add(btnRetour);
 		
-		JComboBox<String> comboBoxClients = new JComboBox<String>();
+		comboBoxClients = new JComboBox<String>();
 		comboBoxClients.setForeground(Color.WHITE);
 		comboBoxClients.setBackground(SystemColor.desktop);
 		comboBoxClients.setBounds(307, 24, 326, 33);
-		compteService.fillListClients(comboBoxClients);
+		comboBoxClients.addItem("");
+		listClients.put(-1, "");
+		if(compteService.fillListClients(this)) {
+           	JOptionPane.showMessageDialog(getContentPane(), 
+                    "Une erreur s'est produite, vous ne pouvez pas créer de compte pour le moment !",
+                    "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+           	this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		
+		comboBoxClients.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String client = listClients.get(getListClientKey(comboBoxClients.getSelectedItem().toString()));
+		        System.out.println(client);
+		        String[] parts = client.split(" - ");
+		        System.out.println(parts);
+		        String libelleClient = parts[0];
+		    	textFieldRaisonSociale.setText(libelleClient);
+		    }
+		});
+		
 		subPanelForm.add(comboBoxClients);
 		
 		JLabel lblClients = new JLabel("Sélectionnez un client :");
@@ -392,6 +419,17 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(separatorClients);
 		
 		pack();
+	}
+	
+	public int getListClientKey(String value) {
+		Integer id = -1;
+	    for(Map.Entry<Integer, String> entry : this.listClients.entrySet()){
+	        if(entry.getValue().equals(value)){
+	            id = entry.getKey();
+	        }
+	    }
+	    
+	    return id;
 	}
 	
 	public JTextField getTextFieldNumCompte() {
@@ -428,5 +466,13 @@ public class OuvrirCompteForm extends JFrame {
 
 	public JRadioButton getRdbtnCompteEpargne() {
 		return rdbtnCompteEpargne;
+	}
+	
+	public JComboBox<String> getComboBoxClients() {
+		return comboBoxClients;
+	}
+	
+	public Hashtable<Integer, String> getListClients() {
+		return listClients;
 	}
 }

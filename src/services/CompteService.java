@@ -78,12 +78,13 @@ public class CompteService {
         List<String> badNumericFields = new ArrayList<String>();
         
         // initialisation d'un tableau associatif contenant les libellés et la valeur des champs du formulaire
-        Hashtable<String, JTextField> listFields = new Hashtable<String, JTextField>();
-        listFields.put("solde initial", form.getTextFieldSoldeInitial());
-        listFields.put("solde minimum", form.getTextFieldSoldeMinimum());
-        listFields.put("frais de transfert", form.getTextFieldFraisDeTransfert());
-        listFields.put("taux d'intéret", form.getTextFieldTauxInteret());
-        listFields.put("plafond", form.getTextFieldPlafond());
+        Hashtable<String, String> listFields = new Hashtable<String, String>();
+        listFields.put("client", form.getComboBoxClients().getSelectedItem().toString());
+        listFields.put("solde initial", form.getTextFieldSoldeInitial().getText());
+        listFields.put("solde minimum", form.getTextFieldSoldeMinimum().getText());
+        listFields.put("frais de transfert", form.getTextFieldFraisDeTransfert().getText());
+        listFields.put("taux d'intéret", form.getTextFieldTauxInteret().getText());
+        listFields.put("plafond", form.getTextFieldPlafond().getText());
         
         // récupérations des clés du tableau associatif
         Set<String> listFieldsKeys = listFields.keySet();
@@ -91,7 +92,7 @@ public class CompteService {
         // pour chaque champ du formulaire
         for (String key : listFieldsKeys) {
         	// le champ est-il vide ?
-            if(listFields.get(key).getText().isEmpty()) {
+            if(listFields.get(key).isEmpty()) {
             	
             	// si création d'un compte courant, ajout du champ concerné dans la liste appropriée
             	if(form.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
@@ -99,13 +100,13 @@ public class CompteService {
             	}else if(form.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
             		// si création d'un compte épargne, ajout du champs concerné dans la liste appropriée
             		emptyFields.add(key);
-            	}else if(key.equals("solde initial")){
+            	}else if(key.equals("solde initial") || key.equals("client")){
             		// ajout du champ dans la liste appropriée
             		emptyFields.add(key);
             	}
             // Sinon, est-il bien au format numérique ?	
             }else {
-            	if(!this.patternMatches(listFields.get(key).getText(), "[+-]?([0-9]*[.])?[0-9]+")) {
+            	if(!this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
             		//Sinon ajout dans la liste appropriée
             		badNumericFields.add(key);
             	}
@@ -142,8 +143,9 @@ public class CompteService {
 		float soldeInitial = solde;
 		boolean cloture = CompteStatut.ACTIF.getStatut();
 		boolean typeCompte = form.getRdbtnCompteCourant().isSelected() ? TypeCompte.COURANT.getType() : TypeCompte.EPARGNE.getType();
+		int idClient = form.getListClientKey(form.getComboBoxClients().getSelectedItem().toString());
 		
-		Compte compte = new Compte(numCompte, solde, soldeInitial, cloture, typeCompte, 1);
+		Compte compte = new Compte(numCompte, solde, soldeInitial, cloture, typeCompte, idClient);
 		isCreatedCompte = addCompte(compte);
 		
 		if(form.getRdbtnCompteCourant().isSelected() && isCreatedCompte) {
@@ -151,7 +153,7 @@ public class CompteService {
 			float soldeMinimum = Float.parseFloat(form.getTextFieldSoldeMinimum().getText());
 			float fraisTransfert = Float.parseFloat(form.getTextFieldFraisDeTransfert().getText());
 			
-			CompteCourant compteCourant = new CompteCourant(numCompte, solde, soldeInitial, cloture, typeCompte, 1, soldeMinimum, fraisTransfert);
+			CompteCourant compteCourant = new CompteCourant(numCompte, solde, soldeInitial, cloture, typeCompte, idClient, soldeMinimum, fraisTransfert);
 			isCreatedCompteCourant = addCompteCourant(compteCourant);
 		}else {
 			if(isCreatedCompte) {
@@ -159,7 +161,7 @@ public class CompteService {
 				float plafond = Float.parseFloat(form.getTextFieldPlafond().getText());
 				float tauxInteret = Float.parseFloat(form.getTextFieldTauxInteret().getText());
 				
-				CompteEpargne compteEpargne = new CompteEpargne(numCompte, solde, soldeInitial, cloture, typeCompte, 1, plafond, tauxInteret);
+				CompteEpargne compteEpargne = new CompteEpargne(numCompte, solde, soldeInitial, cloture, typeCompte, idClient, plafond, tauxInteret);
 				isCreatedCompteEpargne = addCompteEpargne(compteEpargne);
 			}
 		}
@@ -278,14 +280,20 @@ public class CompteService {
 		return id;
 	}
 	
-	public boolean fillListClients(JComboBox<String> list) {
+	public boolean fillListClients(OuvrirCompteForm form) {
 		boolean error = false;
 		List<Object> clients = clientService.getAll();
 		
 		try {
 			for(Object client: clients) {
-				Field field = client.getClass().getDeclaredField("libelleClient");
-				String value = field.get(client).toString();
+				int id = Integer.parseInt(client.getClass().getDeclaredField("id").get(client).toString());
+				String libelleClient = client.getClass().getDeclaredField("libelleClient").get(client) == null ? "" : client.getClass().getDeclaredField("libelleClient").get(client).toString();
+				String raisonSociale = client.getClass().getDeclaredField("raisonSociale").get(client) == null ? "" : client.getClass().getDeclaredField("raisonSociale").get(client).toString();
+				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
+				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
+				
+				form.getListClients().put(id, libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxClients().addItem(libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
 		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
