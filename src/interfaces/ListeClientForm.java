@@ -56,45 +56,45 @@ public class ListeClientForm extends JFrame {
 		      }
 		    
 		      DefaultTableModel model = new DefaultTableModel(data, columns);
-		      JTable table = new JTable(model);
-		      table.setShowGrid(true);
-		      table.setShowVerticalLines(true);
-		      JScrollPane pane = new JScrollPane(table);
-		      JFrame f = new JFrame("Remplir JTable a partir d'une BDD");
-		      JPanel panel = new JPanel();
-		      panel.add(pane);
-		      f.add(panel);
-		      f.setSize(500, 250);
-		      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		      f.setVisible(true);
+		      JScrollPane pane = new JScrollPane();
+		      pane.setBounds(0, 664, 1200, -664);
+		      setTitle("Liste des clients");
+			  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			  setResizable(false);
+			  setPreferredSize(new Dimension(1200, 700));
+			  getContentPane().setLayout(null);
+			  
+			  JPanel panel = new JPanel();
+				panel.setBounds(0, 0, 1200, 700);
+				getContentPane().add(panel);
+				panel.setLayout(null);
+				
+				panelHeader.setBackground(new Color(57, 91, 100));
+				panelHeader.setBounds(0, 0, 1200, 96);
+				panel.add(panelHeader);
+				panelHeader.setLayout(null);
+				panel.add(pane);
+				JTable table = new JTable(model);
+				panel.add(table);
+				table.setBounds(10, 199, 1181, 277);
+				
+				table.setShowGrid(true);
+				table.setShowVerticalLines(true);
+				
 		    
 		    } catch(SQLException e) {
 		      e.printStackTrace();
 		    }
 		
-//		ListeClientService listeClientService = new ListeClientService();
-//		
-//		setTitle("Liste des clients");
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setResizable(false);
-//		setPreferredSize(new Dimension(1200, 700));
-//		getContentPane().setLayout(null);
-//		
-//		JPanel panel = new JPanel();
-//		panel.setBounds(0, 0, 1200, 700);
-//		getContentPane().add(panel);
-//		panel.setLayout(null);
-//		
-//		panelHeader.setBackground(new Color(57, 91, 100));
-//		panelHeader.setBounds(0, 0, 1200, 96);
-//		panel.add(panelHeader);
-//		panelHeader.setLayout(null);
-//		
-//		JButton btnAddClient = new JButton("Ajouter un client");
-//		btnAddClient.setForeground(new Color(57, 91, 100));
-//		btnAddClient.setFont(new Font("Tahoma", Font.BOLD, 14));
-//		btnAddClient.setBounds(92, 35, 154, 34);
-//		panelHeader.add(btnAddClient);
+		ListeClientService listeClientService = new ListeClientService();
+		
+	
+		
+		JButton btnAddClient = new JButton("Ajouter un client");
+		btnAddClient.setForeground(new Color(57, 91, 100));
+		btnAddClient.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnAddClient.setBounds(92, 35, 154, 34);
+		panelHeader.add(btnAddClient);
 		
 		//ClientTable = new JTable();
 		//ClientTable.setModel(new DefaultTableModel(
