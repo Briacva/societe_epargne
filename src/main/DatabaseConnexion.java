@@ -8,13 +8,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import models.Client;
+import models.Compte;
 
 /**
  * @author Guillaume
  *
  */
 public class DatabaseConnexion {
-    private final static String url = "jdbc:mysql://localhost:3307/societe_epargne";
+    private final static String url = "jdbc:mysql://localhost:3306/societe_epargne";
     private final static String user = "root";
     private final static String password = "";
 
@@ -50,4 +51,19 @@ public class DatabaseConnexion {
     		System.out.println(e.getMessage());
     }
 }
+    
+    public static void creditOrDebit(Compte compte) {
+    	try {
+    		String query = "SELECT numeroCompte FROM compte WHERE id = " + compte.getId();
+    		DatabaseConnexion app = new DatabaseConnexion();
+    		Connection conn = app.connect();
+    		PreparedStatement preparedStmt = conn.prepareStatement(query);
+    		preparedStmt.executeQuery(query);
+    		
+    	} catch (SQLException e) {
+    		System.out.println(e.getMessage());
+    }
+}
+    
+    
 }

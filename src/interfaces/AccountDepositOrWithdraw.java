@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import main.DatabaseConnexion;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -67,7 +70,8 @@ public class AccountDepositOrWithdraw extends JFrame {
 		NumeroDeCompte.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		panel.add(NumeroDeCompte);
 		
-		JLabel AccountNumber = new JLabel("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		JLabel AccountNumber = new JLabel();
+		AccountNumber.setText(DatabaseConnexion.creditOrDebit(Compte));
 		AccountNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		AccountNumber.setBounds(0, 221, 601, 14);
 		panel.add(AccountNumber);
@@ -131,5 +135,7 @@ public class AccountDepositOrWithdraw extends JFrame {
 		Bgimage.setIcon(new ImageIcon(CreationClientForm.class.getResource("/images/BGimage.jpg")));
 		Bgimage.setBounds(0, 0, 1184, 761);
 		getContentPane().add(Bgimage);
+		
+		this.setVisible(true);
 	}
 }
