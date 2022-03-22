@@ -106,7 +106,7 @@ public class CompteService {
             	}
             // Sinon, est-il bien au format numérique ?	
             }else {
-            	if(!this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
+            	if(key != "client" && !this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
             		//Sinon ajout dans la liste appropriée
             		badNumericFields.add(key);
             	}
