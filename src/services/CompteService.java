@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import interfaces.OuvrirCompteForm;
+import interfaces.TransfererForm;
 import main.DatabaseConnexion;
 import models.Client;
 import models.Compte;
@@ -292,8 +293,36 @@ public class CompteService {
 				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
 				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
 				
-				form.getListClients().put(id, libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxClients().addItem(libelleClient.isEmpty() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListClients().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxClients().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+			}
+		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+			error = true;
+		}
+		
+		return error;
+	}
+	
+
+	
+	public boolean fillListComptes(TransfererForm form) {
+		boolean error = false;
+		List<Object> clients = clientService.getAll();
+		
+		try {
+			for(Object client: clients) {
+				int id = Integer.parseInt(client.getClass().getDeclaredField("id").get(client).toString());
+				String libelleClient = client.getClass().getDeclaredField("libelleClient").get(client) == null ? "" : client.getClass().getDeclaredField("libelleClient").get(client).toString();
+				String raisonSociale = client.getClass().getDeclaredField("raisonSociale").get(client) == null ? "" : client.getClass().getDeclaredField("raisonSociale").get(client).toString();
+				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
+				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
+				
+				form.getListCompteSource().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxCompteSource().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+			
+				form.getListCompteDestinataire().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxCompteDestinataire().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
 		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();

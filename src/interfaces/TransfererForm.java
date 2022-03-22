@@ -47,7 +47,7 @@ public class TransfererForm extends JFrame {
 
 	private Hashtable<Integer, String> listCompteSource = new Hashtable<Integer, String>();
 	private Hashtable<Integer, String> listCompteDestinataire = new Hashtable<Integer, String>();
-	
+
 	public TransfererForm() {
 		// Instanciation du CompteService
 		CompteService compteService = new CompteService();
@@ -246,6 +246,14 @@ public class TransfererForm extends JFrame {
 		
 		subPanelForm.add(comboBoxCompteDestinataire);
 		
+		if(compteService.fillListComptes(this)) {
+           	JOptionPane.showMessageDialog(getContentPane(), 
+                    "Une erreur s'est produite, vous ne pouvez pas transférer de fonds pour le moment !",
+                    "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+           	this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		
 		pack();
 	}
 	
@@ -259,4 +267,22 @@ public class TransfererForm extends JFrame {
 	    
 	    return id;
 	}
+	
+	
+	public JComboBox<String> getComboBoxCompteSource() {
+		return comboBoxCompteSource;
+	}
+
+	public JComboBox<String> getComboBoxCompteDestinataire() {
+		return comboBoxCompteDestinataire;
+	}
+	
+	public Hashtable<Integer, String> getListCompteSource() {
+		return listCompteSource;
+	}
+
+	public Hashtable<Integer, String> getListCompteDestinataire() {
+		return listCompteDestinataire;
+	}
+
 }
