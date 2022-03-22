@@ -344,7 +344,7 @@ public class OuvrirCompteForm extends JFrame {
   		                      "Information",
   		                      JOptionPane.INFORMATION_MESSAGE);
                     	
-                    	compteService.fieldReinitialization(frame);
+                    	compteService.fieldReinitialization(frame, null);
                     	comboBoxClients.setSelectedIndex(0);
                     	compteService.generateNumCompte(textFieldNumCompte);
                 	}else {
@@ -368,7 +368,7 @@ public class OuvrirCompteForm extends JFrame {
 		        Component component = (Component) e.getSource();
 		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
 		        
-		        compteService.fieldReinitialization(frame);
+		        compteService.fieldReinitialization(frame, null);
 			}
 		});
 		

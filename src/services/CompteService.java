@@ -10,6 +10,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class CompteService {
 	
 	private DatabaseConnexion app;
 	private ClientService clientService;
+	private CompteService compteService;
 	
 	public CompteService() {
 		this.app = new DatabaseConnexion();
@@ -54,12 +56,18 @@ public class CompteService {
 	 * 
 	 * @param OuvrirCompteForm
 	 */
-	public void fieldReinitialization(OuvrirCompteForm form) {
-		form.getTextFieldSoldeInitial().setText(null);
-		form.getTextFieldSoldeMinimum().setText(null);
-		form.getTextFieldFraisDeTransfert().setText(null);
-		form.getTextFieldTauxInteret().setText(null);
-		form.getTextFieldPlafond().setText(null);
+	public void fieldReinitialization(OuvrirCompteForm formNewAccount, TransfererForm formTransfert) {
+		if(formNewAccount != null) {
+			formNewAccount.getTextFieldSoldeInitial().setText(null);
+			formNewAccount.getTextFieldSoldeMinimum().setText(null);
+			formNewAccount.getTextFieldFraisDeTransfert().setText(null);
+			formNewAccount.getTextFieldTauxInteret().setText(null);
+			formNewAccount.getTextFieldPlafond().setText(null);
+		}else {
+			formTransfert.getComboBoxCompteDestinataire().setSelectedIndex(0);
+			formTransfert.getComboBoxCompteSource().setSelectedIndex(0);
+			formTransfert.getTextFieldMontant().setText(null);
+		}
 	}
 	
 	/**
@@ -283,20 +291,20 @@ public class CompteService {
 	
 	public boolean fillListClients(OuvrirCompteForm form) {
 		boolean error = false;
-		List<Object> clients = clientService.getAll();
+		List<Client> clients = clientService.getAll();
 		
 		try {
-			for(Object client: clients) {
-				int id = Integer.parseInt(client.getClass().getDeclaredField("id").get(client).toString());
-				String libelleClient = client.getClass().getDeclaredField("libelleClient").get(client) == null ? "" : client.getClass().getDeclaredField("libelleClient").get(client).toString();
-				String raisonSociale = client.getClass().getDeclaredField("raisonSociale").get(client) == null ? "" : client.getClass().getDeclaredField("raisonSociale").get(client).toString();
-				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
-				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
+			for(Client client: clients) {
+				int id = client.getId();
+				String libelleClient = client.getLibelleClient();
+				String raisonSociale = client.getRaisonSocial();
+				String telephone = client.getTelephone();
+				String adresse = client.getAdresse();
 				
 				form.getListClients().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 				form.getComboBoxClients().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
-		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+		}catch(SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
 			error = true;
 		}
@@ -308,27 +316,67 @@ public class CompteService {
 	
 	public boolean fillListComptes(TransfererForm form) {
 		boolean error = false;
-		List<Object> clients = clientService.getAll();
+		List<Compte> comptes = this.getAll();
 		
 		try {
-			for(Object client: clients) {
-				int id = Integer.parseInt(client.getClass().getDeclaredField("id").get(client).toString());
-				String libelleClient = client.getClass().getDeclaredField("libelleClient").get(client) == null ? "" : client.getClass().getDeclaredField("libelleClient").get(client).toString();
-				String raisonSociale = client.getClass().getDeclaredField("raisonSociale").get(client) == null ? "" : client.getClass().getDeclaredField("raisonSociale").get(client).toString();
-				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
-				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
+			for(Compte compte: comptes) {
+				int id = compte.getId();
+				String libelleClient = compte.getClient(compte).getLibelleClient();
+				String raisonSociale = compte.getClient(compte).getRaisonSocial();
+				String typeCompte = compte.getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
+				int numCompte = compte.getNumCompte();
 				
-				form.getListCompteSource().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxCompteSource().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListCompteSource().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteSource().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
 			
-				form.getListCompteDestinataire().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxCompteDestinataire().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListCompteDestinataire().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteDestinataire().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
 			}
-		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+		}catch(SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
 			error = true;
 		}
 		
 		return error;
 	}
+	
+	public List<Compte> getAll() {
+		List<Compte> list = new ArrayList<Compte>();
+		
+		try{
+			Connection conn = this.app.connect();
+			Statement stmt = conn.createStatement();
+			
+			String query = "SELECT CO.* FROM Compte CO INNER JOIN Client CL ON CO.id_Client = CL.id WHERE CO.cloture = " + CompteStatut.ACTIF.getStatut();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
+				while (rs.next()) {
+					Compte compte = new Compte(
+							rs.getInt("numeroCompte"),
+							rs.getFloat("solde"),
+							rs.getFloat("soldeInitial"),
+							rs.getBoolean("cloture"),
+							rs.getBoolean("typeCompte"),
+							rs.getInt("id_Client")
+					);
+					
+					compte.setId(rs.getInt("id"));
+					
+					list.add(compte);
+					
+				}
+			}else {
+				System.out.println("\nAucune donnée n'a été trouvé.");
+			}
+			
+			rs.close();
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+		}
+		
+		return list;
+	}
+	
 }

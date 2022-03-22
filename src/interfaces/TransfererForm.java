@@ -195,7 +195,7 @@ public class TransfererForm extends JFrame {
 		        Component component = (Component) e.getSource();
 		        TransfererForm frame = (TransfererForm) SwingUtilities.getWindowAncestor(component);
 		        
-//		        compteService.fieldReinitialization(frame);
+		        compteService.fieldReinitialization(null, frame);
 			}
 		});
 		
@@ -268,7 +268,10 @@ public class TransfererForm extends JFrame {
 	    return id;
 	}
 	
-	
+	public JTextField getTextFieldMontant() {
+		return textFieldMontant;
+	}
+
 	public JComboBox<String> getComboBoxCompteSource() {
 		return comboBoxCompteSource;
 	}
