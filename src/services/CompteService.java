@@ -1,23 +1,20 @@
 package services;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.ComboBoxEditor;
-import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import interfaces.OuvrirCompteForm;
@@ -28,13 +25,13 @@ import models.Compte;
 import models.CompteCourant;
 import models.CompteEpargne;
 import models.CompteStatut;
+import models.Transfert;
 import models.TypeCompte;
 
 public class CompteService {
 	
 	private DatabaseConnexion app;
 	private ClientService clientService;
-	private CompteService compteService;
 	
 	public CompteService() {
 		this.app = new DatabaseConnexion();
@@ -75,7 +72,7 @@ public class CompteService {
 	 * @param form
 	 * @return
 	 */
-	public Hashtable<String, List<String>> checkFields(OuvrirCompteForm form) {
+	public Hashtable<String, List<String>> checkFields(OuvrirCompteForm formNewAccount, TransfererForm formTransfert) {
 		
         // initialisation du tableau associatif d'erreur
 		Hashtable<String, List<String>> fieldsInError = new Hashtable<String, List<String>>();
@@ -88,12 +85,18 @@ public class CompteService {
         
         // initialisation d'un tableau associatif contenant les libellés et la valeur des champs du formulaire
         Hashtable<String, String> listFields = new Hashtable<String, String>();
-        listFields.put("client", form.getComboBoxClients().getSelectedItem().toString());
-        listFields.put("solde initial", form.getTextFieldSoldeInitial().getText());
-        listFields.put("solde minimum", form.getTextFieldSoldeMinimum().getText());
-        listFields.put("frais de transfert", form.getTextFieldFraisDeTransfert().getText());
-        listFields.put("taux d'intéret", form.getTextFieldTauxInteret().getText());
-        listFields.put("plafond", form.getTextFieldPlafond().getText());
+        if(formNewAccount != null) {
+	        listFields.put("client", formNewAccount.getComboBoxClients().getSelectedItem().toString());
+	        listFields.put("solde initial", formNewAccount.getTextFieldSoldeInitial().getText());
+	        listFields.put("solde minimum", formNewAccount.getTextFieldSoldeMinimum().getText());
+	        listFields.put("frais de transfert", formNewAccount.getTextFieldFraisDeTransfert().getText());
+	        listFields.put("taux d'intéret", formNewAccount.getTextFieldTauxInteret().getText());
+	        listFields.put("plafond", formNewAccount.getTextFieldPlafond().getText());
+        }else {
+        	listFields.put("compte source", formTransfert.getComboBoxCompteSource().getSelectedItem().toString());
+        	listFields.put("compte destinataire", formTransfert.getComboBoxCompteDestinataire().getSelectedItem().toString());
+        	listFields.put("montant", formTransfert.getTextFieldMontant().getText());
+        }
         
         // récupérations des clés du tableau associatif
         Set<String> listFieldsKeys = listFields.keySet();
@@ -103,19 +106,23 @@ public class CompteService {
         	// le champ est-il vide ?
             if(listFields.get(key).isEmpty()) {
             	
-            	// si création d'un compte courant, ajout du champ concerné dans la liste appropriée
-            	if(form.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
-                	emptyFields.add(key);
-            	}else if(form.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
-            		// si création d'un compte épargne, ajout du champs concerné dans la liste appropriée
-            		emptyFields.add(key);
-            	}else if(key.equals("solde initial") || key.equals("client")){
-            		// ajout du champ dans la liste appropriée
+            	if(formNewAccount != null) {
+	            	// si création d'un compte courant, ajout du champ concerné dans la liste appropriée
+	            	if(formNewAccount.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
+	                	emptyFields.add(key);
+	            	}else if(formNewAccount.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
+	            		// si création d'un compte épargne, ajout du champs concerné dans la liste appropriée
+	            		emptyFields.add(key);
+	            	}else if(key.equals("solde initial") || key.equals("client")){
+	            		// ajout du champ dans la liste appropriée
+	            		emptyFields.add(key);
+	            	}
+            	}else {
             		emptyFields.add(key);
             	}
             // Sinon, est-il bien au format numérique ?	
             }else {
-            	if(key != "client" && !this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
+            	if((!key.equals("client") && !key.equals("compte source") && !key.equals("compte destinataire")) && !this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
             		//Sinon ajout dans la liste appropriée
             		badNumericFields.add(key);
             	}
@@ -152,7 +159,7 @@ public class CompteService {
 		float soldeInitial = solde;
 		boolean cloture = CompteStatut.ACTIF.getStatut();
 		boolean typeCompte = form.getRdbtnCompteCourant().isSelected() ? TypeCompte.COURANT.getType() : TypeCompte.EPARGNE.getType();
-		int idClient = form.getListClientKey(form.getComboBoxClients().getSelectedItem().toString());
+		int idClient = this.getListClientKey(form.getListClients(), form.getComboBoxClients().getSelectedItem().toString());
 		
 		Compte compte = new Compte(numCompte, solde, soldeInitial, cloture, typeCompte, idClient);
 		isCreatedCompte = addCompte(compte);
@@ -268,6 +275,65 @@ public class CompteService {
         return isCreated;
 	}
 	
+	public boolean addTransfert(Transfert transfert) {
+		boolean isCreated = false;
+		
+		String query = "INSERT INTO Transferer(idCompteDebiteur, idCompteCredite, montant, dateTransfert)"
+		        + " VALUES (?, ?, ?, ?)";
+		      
+        try {	      
+		    // create the mysql insert preparedstatement
+	        Connection conn = this.app.connect();
+	        PreparedStatement preparedStmt = conn.prepareStatement(query);
+	      
+	        preparedStmt.setInt 		(1, transfert.getIdCompteDebiteur());
+	        preparedStmt.setInt 		(2, transfert.getIdCompteCredite());
+	        preparedStmt.setFloat 		(3, transfert.getMontant());
+	        preparedStmt.setDate		(4,  new java.sql.Date(transfert.getDateTransfert().getTime()));
+	
+	        // check si la requête s'est correctement executée
+	        isCreated = preparedStmt.executeUpdate() == 1;
+	        conn.close();
+		      
+		} catch (SQLException e) {
+		    System.err.println("Got an exception!");
+		    System.err.println(e.getMessage());
+		}
+        
+        return isCreated;
+	}
+	
+	public boolean updateCompte(Transfert transfert) {
+		boolean isUpdated = false;
+		
+		String queryDebite = "UPDATE Compte set solde = solde - ? WHERE id = ?";
+		String queryCredite = "UPDATE Compte set solde = solde + ? WHERE id = ?";
+		
+        try {	      
+		    // create the mysql insert preparedstatement
+	        Connection conn = this.app.connect();
+	        PreparedStatement preparedStmtCredite = conn.prepareStatement(queryCredite);
+
+	        preparedStmtCredite.setFloat (1, transfert.getMontant());
+	        preparedStmtCredite.setInt 	 (2, transfert.getIdCompteCredite());
+	        
+	        PreparedStatement preparedStmtDebite = conn.prepareStatement(queryDebite);
+
+	        preparedStmtDebite.setFloat (1, transfert.getMontant());
+	        preparedStmtDebite.setInt 	(2, transfert.getIdCompteDebiteur());
+	
+	        // check si la requête s'est correctement executée
+	        isUpdated = preparedStmtCredite.executeUpdate() == 1 && preparedStmtDebite.executeUpdate() == 1;
+	        conn.close();
+		      
+		} catch (SQLException e) {
+		    System.err.println("Got an exception!");
+		    System.err.println(e.getMessage());
+		}
+		
+		return isUpdated;
+	}
+	
 	public int getLastCompte(int numCompte) {
 		Integer id = null;
 		
@@ -312,8 +378,33 @@ public class CompteService {
 		return error;
 	}
 	
-
+	public boolean createTransfert(TransfererForm form) {
+		
+		boolean isCreatedTransfert = false, isUpdated = false;
+		
+		int idCompteSource = this.getListClientKey(form.getListCompteSource(), form.getComboBoxCompteSource().getSelectedItem().toString());
+		int idCompteDestinataire = this.getListClientKey(form.getListCompteDestinataire(), form.getComboBoxCompteDestinataire().getSelectedItem().toString());
+		float montant = Float.parseFloat(form.getTextFieldMontant().getText());
+        Date sysDate = new Date();
+		
+		Transfert transfert = new Transfert(idCompteSource, idCompteDestinataire, montant, sysDate);
+		
+		isCreatedTransfert = addTransfert(transfert);
+		isUpdated = updateCompte(transfert);
+		
+		return isCreatedTransfert && isUpdated;
+	}
 	
+	public int getListClientKey(Hashtable<Integer, String> list, String value) {
+		Integer id = -1;
+	    for(Map.Entry<Integer, String> entry : list.entrySet()){
+	        if(entry.getValue().equals(value)){
+	            id = entry.getKey();
+	        }
+	    }
+	    
+	    return id;
+	}
 	public boolean fillListComptes(TransfererForm form) {
 		boolean error = false;
 		List<Compte> comptes = this.getAll();

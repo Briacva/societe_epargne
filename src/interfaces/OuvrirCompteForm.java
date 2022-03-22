@@ -291,7 +291,7 @@ public class OuvrirCompteForm extends JFrame {
 		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
 		        
 		        // alimentation du tableau des erreurs
-		        Hashtable<String, List<String>> errors = compteService.checkFields(frame);
+		        Hashtable<String, List<String>> errors = compteService.checkFields(frame, null);
 		        
 		        // si il y a plusieurs champs non saisis
 		        if((errors.get("emptyFields").size() > 0)) {
@@ -397,7 +397,7 @@ public class OuvrirCompteForm extends JFrame {
 		
 		comboBoxClients.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        String client = listClients.get(getListClientKey(comboBoxClients.getSelectedItem().toString()));
+		        String client = listClients.get(compteService.getListClientKey(listClients, comboBoxClients.getSelectedItem().toString()));
 		        String[] parts = client.split(" - ");
 		        String libelleClient = parts[0];
 		    	textFieldRaisonSociale.setText(libelleClient);
@@ -417,17 +417,6 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(separatorClients);
 		
 		pack();
-	}
-	
-	public int getListClientKey(String value) {
-		Integer id = -1;
-	    for(Map.Entry<Integer, String> entry : this.listClients.entrySet()){
-	        if(entry.getValue().equals(value)){
-	            id = entry.getKey();
-	        }
-	    }
-	    
-	    return id;
 	}
 	
 	public JTextField getTextFieldNumCompte() {

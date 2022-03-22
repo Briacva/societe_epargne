@@ -115,72 +115,47 @@ public class TransfererForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//Récupération de l'interface
 		        Component component = (Component) e.getSource();
-		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+		        TransfererForm frame = (TransfererForm) SwingUtilities.getWindowAncestor(component);
 		        
-//		        // alimentation du tableau des erreurs
-//		        Hashtable<String, List<String>> errors = compteService.checkFields(frame);
-//		        
-//		        // si il y a plusieurs champs non saisis
-//		        if((errors.get("emptyFields").size() > 0)) {
-//		        	
-//	                String error = errors.get("emptyFields").stream().collect(Collectors.joining(", "));
-//	                
-//	                JOptionPane.showMessageDialog(getContentPane(), 
-//	                      "Veuillez saisir le ou les champs suivants : " + error,
-//	                      "Erreur",
-//	                      JOptionPane.ERROR_MESSAGE);
-//	            // sinon si les champs ne sont pas numériques    
-//                }else if(errors.get("emptyFields").size() == 0 && errors.get("badNumericFields").size() > 0) {
-//                	
-//	                String error = errors.get("badNumericFields").stream().collect(Collectors.joining(", "));
-//	                
-//	                JOptionPane.showMessageDialog(getContentPane(), 
-//	                      "Le ou les champs suivants ne sont pas au format numérique : " + error,
-//	                      "Erreur",
-//	                      JOptionPane.ERROR_MESSAGE);
-//	            // sinon le champ solde initial est-il inférieur au champ soolde minimum
-//                }else if(rdbtnCompteCourant.isSelected() && Double.parseDouble(textFieldMontant.getText()) < Double.parseDouble(textFieldSoldeMinimum.getText())) {
-//                	
-//	                JOptionPane.showMessageDialog(getContentPane(), 
-//		                      "Le solde initial ne peut pas être inférieur au solde minimum autorisé !",
-//		                      "Avertissement",
-//		                      JOptionPane.WARNING_MESSAGE);
-//	            //sinon si le champ solde initial est-il supérieur au champ plafond    
-//                }else if(rdbtnCompteEpargne.isSelected() && Double.parseDouble(textFieldMontant.getText()) > Double.parseDouble(textFieldPlafond.getText())) {
-//                	
-//	                JOptionPane.showMessageDialog(getContentPane(), 
-//		                      "Le solde initial ne peut pas être supérieur au plafond autorisé !",
-//		                      "Avertissement",
-//		                      JOptionPane.WARNING_MESSAGE);
-//                }else if(rdbtnCompteEpargne.isSelected() && (Double.parseDouble(textFieldMontant.getText()) > 100000 || Double.parseDouble(textFieldPlafond.getText()) > 100000)) {
-//                	JOptionPane.showMessageDialog(getContentPane(), 
-//		                      "La valeur maximal des champs solde initial et plafond ne peut pas excéder 100000 !",
-//		                      "Avertissement",
-//		                      JOptionPane.WARNING_MESSAGE);
-//                }else if(rdbtnCompteEpargne.isSelected() && (Double.parseDouble(textFieldTauxInteret.getText()) > 100)) {
-//                	JOptionPane.showMessageDialog(getContentPane(), 
-//		                      "Le taux d'intérêt ne peut pas excéder 100% !",
-//		                      "Avertissement",
-//		                      JOptionPane.WARNING_MESSAGE);
-//                }
-//                else {
-//                	//vérifier que le champ taux d'intérêt est pas supérieur à 100
-//                	if(compteService.createBankAccount(frame)){
-//                    	JOptionPane.showMessageDialog(getContentPane(), 
-//  		                      "Le compte a bien été créé.",
-//  		                      "Information",
-//  		                      JOptionPane.INFORMATION_MESSAGE);
-//                    	
-//                    	compteService.fieldReinitialization(frame);
-//                    	comboBoxCompteSource.setSelectedIndex(0);
-//                    	compteService.generateNumCompte(textFieldNumCompte);
-//                	}else {
-//                    	JOptionPane.showMessageDialog(getContentPane(), 
-//    		                      "Une erreur s'est produite, le compte n'a pas été enregistré !",
-//    		                      "Erreur",
-//    		                      JOptionPane.ERROR_MESSAGE);
-//                	}
-//                }		        
+		        // alimentation du tableau des erreurs
+		        Hashtable<String, List<String>> errors = compteService.checkFields(null, frame);
+		        
+		        // si il y a plusieurs champs non saisis
+		        if((errors.get("emptyFields").size() > 0)) {
+		        	
+	                String error = errors.get("emptyFields").stream().collect(Collectors.joining(", "));
+	                
+	                JOptionPane.showMessageDialog(getContentPane(), 
+	                      "Veuillez saisir le ou les champs suivants : " + error,
+	                      "Erreur",
+	                      JOptionPane.ERROR_MESSAGE);
+	            // sinon si les champs ne sont pas numériques    
+                }else if(errors.get("emptyFields").size() == 0 && errors.get("badNumericFields").size() > 0) {
+                	
+	                String error = errors.get("badNumericFields").stream().collect(Collectors.joining(", "));
+	                
+	                JOptionPane.showMessageDialog(getContentPane(), 
+	                      "Le ou les champs suivants ne sont pas au format numérique : " + error,
+	                      "Erreur",
+	                      JOptionPane.ERROR_MESSAGE);
+	            // sinon le champ solde initial est-il inférieur au champ soolde minimum
+                }
+                else {
+                	//vérifier que le champ taux d'intérêt est pas supérieur à 100
+                	if(compteService.createTransfert(frame)){
+                    	JOptionPane.showMessageDialog(getContentPane(), 
+  		                      "Le transfert a bien été effectué !",
+  		                      "Information",
+  		                      JOptionPane.INFORMATION_MESSAGE);
+                    	
+                    	compteService.fieldReinitialization(null, frame);
+                	}else {
+                    	JOptionPane.showMessageDialog(getContentPane(), 
+    		                      "Une erreur s'est produite, le transfert n'a pas été enregistré !",
+    		                      "Erreur",
+    		                      JOptionPane.ERROR_MESSAGE);
+                	}
+                }		        
 			}
 		});
 		
@@ -255,17 +230,6 @@ public class TransfererForm extends JFrame {
 		}
 		
 		pack();
-	}
-	
-	public int getListClientKey(String value) {
-		Integer id = -1;
-//	        if(entry.getValue().equals(value)){
-//	    for(Map.Entry<Integer, String> entry : this.listClients.entrySet()){
-//	            id = entry.getKey();
-//	        }
-//	    }
-	    
-	    return id;
 	}
 	
 	public JTextField getTextFieldMontant() {
