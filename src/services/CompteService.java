@@ -367,8 +367,8 @@ public class CompteService {
 				String telephone = client.getTelephone();
 				String adresse = client.getAdresse();
 				
-				form.getListClients().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxClients().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListClients().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxClients().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
 		}catch(SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
@@ -405,6 +405,7 @@ public class CompteService {
 	    
 	    return id;
 	}
+	
 	public boolean fillListComptes(TransfererForm form) {
 		boolean error = false;
 		List<Compte> comptes = this.getAll();
@@ -417,11 +418,11 @@ public class CompteService {
 				String typeCompte = compte.getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
 				int numCompte = compte.getNumCompte();
 				
-				form.getListCompteSource().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
-				form.getComboBoxCompteSource().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getListCompteSource().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteSource().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
 			
-				form.getListCompteDestinataire().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
-				form.getComboBoxCompteDestinataire().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getListCompteDestinataire().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteDestinataire().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
 			}
 		}catch(SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
