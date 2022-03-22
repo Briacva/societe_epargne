@@ -7,111 +7,95 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import com.mysql.cj.xdevapi.Statement;
-
+import models.Client;
 import services.ListeClientService;
 import javax.swing.JButton;
-import javax.swing.JRadioButton;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 public class ListeClientForm extends JFrame {
 	
-	private JTable ClientTable;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel panelHeader = new JPanel();
+	private ListeClientService listeClientService;
 	
 	public ListeClientForm() {
-		try 
-		  {
-		      String url = "jdbc:mysql://localhost:3306/societe_epargne";
-		      String user = "root";
-		      String password = "";
-		    
-		      Connection con = DriverManager.getConnection(url, user, password);
-		    
-		      String query = "SELECT * FROM client";
-		      
-		      PreparedStatement stm = con.prepareStatement(query);
-		      ResultSet res = stm.executeQuery();
-		    
-		      String columns[] = { "id", "raisonSociale", "libelleClient", "numeroTel", "mail", "adresse", "civilite", "dateNaisssance" };
-		      String data[][] = new String[8][3];
-		    
-		      int i = 0;
-		      while (res.next()) {
-		        int id = res.getInt("ID");
-		        String raisonSociale = res.getString("raisonSociale");
-		        String libelleClient = res.getString("libelleClient");
-		        data[i][0] = id + "";
-		        data[i][1] = raisonSociale;
-		        data[i][2] = libelleClient;
-		        i++;
-		      }
-		    
-		      DefaultTableModel model = new DefaultTableModel(data, columns);
-		      JScrollPane pane = new JScrollPane();
-		      pane.setBounds(0, 664, 1200, -664);
-		      setTitle("Liste des clients");
-			  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			  setResizable(false);
-			  setPreferredSize(new Dimension(1200, 700));
-			  getContentPane().setLayout(null);
-			  
-			  JPanel panel = new JPanel();
-				panel.setBounds(0, 0, 1200, 700);
-				getContentPane().add(panel);
-				panel.setLayout(null);
-				
-				panelHeader.setBackground(new Color(57, 91, 100));
-				panelHeader.setBounds(0, 0, 1200, 96);
-				panel.add(panelHeader);
-				panelHeader.setLayout(null);
-				panel.add(pane);
-				JTable table = new JTable(model);
-				panel.add(table);
-				table.setBounds(10, 199, 1181, 277);
-				
-				table.setShowGrid(true);
-				table.setShowVerticalLines(true);
-				
-		    
-		    } catch(SQLException e) {
-		      e.printStackTrace();
-		    }
+		listeClientService = new ListeClientService();
+		List<Client> listClients = listeClientService.getClients();	
+		String columns[] = { "id", "raisonSociale", "libelleClient", "numeroTel", "mail", "adresse", "civilite", "dateNaisssance" };
 		
-		ListeClientService listeClientService = new ListeClientService();
+		Object data[][] = new Object[listClients.size()][columns.length];
+		for(int i = 0; i < listClients.size(); i++){
+			data[i][0] = listClients.get(i).getId();
+			data[i][1] = listClients.get(i).getRaisonSociale();
+			data[i][2] = listClients.get(i).getLibelleClient();
+			data[i][3] = listClients.get(i).getNumeroTel();
+			data[i][4] = listClients.get(i).getMail();
+			data[i][5] = listClients.get(i).getAdresse();
+			data[i][6] = listClients.get(i).getCivilite();
+			data[i][7] = listClients.get(i).getDateNaisssance();
+		}
+					    
+		setTitle("Liste des clients");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setPreferredSize(new Dimension(1200, 700));
+		getContentPane().setLayout(null);
+		  
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 1200, 700);
+		getContentPane().add(panel);
+		panel.setLayout(null);
 		
-	
+		panelHeader.setBackground(new Color(57, 91, 100));
+		panelHeader.setBounds(0, 0, 1200, 96);
+		panel.add(panelHeader);
 		
+		panelHeader.setLayout(null);
 		JButton btnAddClient = new JButton("Ajouter un client");
 		btnAddClient.setForeground(new Color(57, 91, 100));
 		btnAddClient.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnAddClient.setBounds(92, 35, 154, 34);
+		btnAddClient.setBounds(92, 35, 191, 34);
 		panelHeader.add(btnAddClient);
-		
-		//ClientTable = new JTable();
-		//ClientTable.setModel(new DefaultTableModel(
-//			new Object[][] {
-//				{"Raison sociale", "Libell\u00E9 Client", "Num\u00E9ro de t\u00E9l\u00E9phone", "Mail", "Adresse", "Civilit\u00E9", "Date de Naissance"},
-//			},
-//			new String[] {
-//				"Raison sociale", "Libell\u00E9 Client", "Num\u00E9ro de t\u00E9l\u00E9phone", "Mail", "Adresse", "Civilit\u00E9", "Date de Naissance"
-//			}
-//		));
-		//JTableHeader Theader = table.getTableHeader();
-		//Theader.setBackground(Color.red);
-		
-//		ClientTable.setBounds(111, 131, 940, 504);
-//		panel.add(ClientTable);
-		
-		
+        
+        JTable table = new JTable(data, columns) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            	
+            	
+                // do some actions here, for example
+                // print first column value from selected row
+            	int column = 0;
+            	int row = table.getSelectedRow();
+            	String value = table.getModel().getValueAt(row, column).toString();
+                System.out.println(value);
+            }
+        });
+        
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(126, 156, 929, 426);
+        panel.add(scrollPane);
 		pack();
+	}
+
+	public ListeClientService getListeClientService() {
+		return listeClientService;
 	}
 }
