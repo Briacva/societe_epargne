@@ -1,13 +1,30 @@
 package interfaces;
 import java.awt.Color;
+import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
+import models.Client;
+import models.Compte;
+import services.ClientService;
+import services.CompteService;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -16,15 +33,22 @@ public class AccountDepositOrWithdraw extends JFrame {
 	private JLabel AccountNumber;
 	private JLabel NameOrSocialInput;
 	private JLabel SoldeIntput;
+	private Compte compte;
+	private JRadioButton rdbtndebit;
+	private JRadioButton rdbtnCredit;
+	private ClientService clientService;
+	private CompteService compteService;
+	private JButton Validate;
+	private int idCompte;
 	
 	
-	public JTextField getMontantTextField() {
-		return MontantTextField;
+	
+	public Compte getCompte() {
+		return compte;
 	}
 
-	public void setMontantTextField(
-			JTextField montantTextField) {
-		MontantTextField = montantTextField;
+	public JTextField getMontantTextField() {
+		return MontantTextField;
 	}
 
 	public void
@@ -40,9 +64,23 @@ public class AccountDepositOrWithdraw extends JFrame {
 	public void setSoldeIntput(JLabel soldeIntput) {
 		SoldeIntput = soldeIntput;
 	}
+	
+	public JRadioButton getRdbtndebit() {
+		return rdbtndebit;
+	}
 
+	public JRadioButton getRdbtnCredit() {
+		return rdbtnCredit;
+	}
+	public int getIdCompte() {
+		return idCompte;
+	}
 		
-	public AccountDepositOrWithdraw() {
+	public AccountDepositOrWithdraw(Compte compte) {
+		this.compte = compte;
+		this.idCompte = compte.getId();
+		this.clientService = new ClientService();
+		this.compteService = new CompteService();
 		getContentPane().setForeground(new Color(0, 255, 0));
 		setTitle("Societe d'epargne");
 		setSize(1200,800);
@@ -67,24 +105,28 @@ public class AccountDepositOrWithdraw extends JFrame {
 		NumeroDeCompte.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		panel.add(NumeroDeCompte);
 		
-		JLabel AccountNumber = new JLabel("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		JLabel AccountNumber = new JLabel(String.valueOf(this.compte.getNumCompte()));
 		AccountNumber.setHorizontalAlignment(SwingConstants.CENTER);
 		AccountNumber.setBounds(0, 221, 601, 14);
 		panel.add(AccountNumber);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("D\u00E9biter");
-		rdbtnNewRadioButton_1.setHorizontalAlignment(SwingConstants.CENTER);
-		rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		rdbtnNewRadioButton_1.setBackground(Color.LIGHT_GRAY);
-		rdbtnNewRadioButton_1.setBounds(143, 111, 153, 29);
-		panel.add(rdbtnNewRadioButton_1);
 		
-		JRadioButton rdbtnComptepargne_1 = new JRadioButton("Cr\u00E9diter");
-		rdbtnComptepargne_1.setHorizontalAlignment(SwingConstants.CENTER);
-		rdbtnComptepargne_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		rdbtnComptepargne_1.setBackground(Color.LIGHT_GRAY);
-		rdbtnComptepargne_1.setBounds(325, 111, 157, 29);
-		panel.add(rdbtnComptepargne_1);
+		ButtonGroup radioButtonGroup = new ButtonGroup();
+		rdbtndebit = new JRadioButton("D\u00E9biter", true);
+		rdbtndebit.setHorizontalAlignment(SwingConstants.CENTER);
+		rdbtndebit.setFont(new Font("Tahoma", Font.BOLD, 16));
+		rdbtndebit.setBackground(Color.LIGHT_GRAY);
+		rdbtndebit.setBounds(143, 111, 153, 29);
+		panel.add(rdbtndebit);
+		
+		rdbtnCredit = new JRadioButton("Cr\u00E9diter");
+		rdbtnCredit.setHorizontalAlignment(SwingConstants.CENTER);
+		rdbtnCredit.setFont(new Font("Tahoma", Font.BOLD, 16));
+		rdbtnCredit.setBackground(Color.LIGHT_GRAY);
+		rdbtnCredit.setBounds(325, 111, 157, 29);
+		panel.add(rdbtnCredit);
+		radioButtonGroup.add(rdbtnCredit);
+		radioButtonGroup.add(rdbtndebit);
 		
 		JLabel NameOrSocialReason = new JLabel("Raison sociale / Libell\u00E9 client");
 		NameOrSocialReason.setHorizontalAlignment(SwingConstants.CENTER);
@@ -92,7 +134,8 @@ public class AccountDepositOrWithdraw extends JFrame {
 		NameOrSocialReason.setBounds(0, 259, 600, 17);
 		panel.add(NameOrSocialReason);
 		
-		JLabel NameOrSocialInput = new JLabel("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		Client client = clientService.getClientById(this.compte.getIdClient());
+		JLabel NameOrSocialInput = new JLabel(client.getRaisonSocial().isEmpty() || client.getRaisonSocial().isBlank() ? client.getLibelleClient():client.getRaisonSocial());
 		NameOrSocialInput.setHorizontalAlignment(SwingConstants.CENTER);
 		NameOrSocialInput.setBounds(-2, 304, 602, 14);
 		panel.add(NameOrSocialInput);
@@ -107,16 +150,54 @@ public class AccountDepositOrWithdraw extends JFrame {
 		MontantTextField.setBounds(189, 445, 228, 29);
 		panel.add(MontantTextField);
 		MontantTextField.setColumns(10);
+		MontantTextField.addKeyListener(new KeyAdapter() {
+	         public void keyPressed(KeyEvent ke) {
+	        	Validate.setEnabled(true);
+	            String value = MontantTextField.getText();
+	            int l = value.length();
+	            if (l > 0 && !compteService.patternMatches(value, "[+-]?([0-9]*[.])?[0-9]+")) {
+	            	Validate.setEnabled(false);
+	            }
+	         }
+	      });
 		
-		JButton Validate = new JButton("Valider");
+		Validate = new JButton("Valider");
 		Validate.setBounds(159, 522, 105, 35);
 		panel.add(Validate);
+		Validate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Component component = (Component) e.getSource();
+				AccountDepositOrWithdraw frame = (AccountDepositOrWithdraw) SwingUtilities.getWindowAncestor(component);
+				if(MontantTextField.getText().isEmpty()|| MontantTextField.getText().isBlank()) {
+					JOptionPane.showMessageDialog(getContentPane(), 
+					"Saisi un montant pauvre con !!",
+       	         	" Erreur ",
+       	         	JOptionPane.ERROR_MESSAGE);
+				}else {
+					if (compteService.updateDepositOrWithdraw(frame)){
+						JOptionPane.showMessageDialog(getContentPane(), 
+								"Tout s'est bien passé Guignole",
+			       	         	" Valider ",
+			       	         	JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(getContentPane(), 
+								"Ta encore fais de la merde bordel",
+			       	         	" Try again ",
+			       	         	JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				}
+			}
+		});
+			
+                
 		
 		JButton Cancel = new JButton("Annuler");
 		Cancel.setBounds(355, 522, 105, 35);
 		panel.add(Cancel);
 		
-		JLabel SoldeInput = new JLabel("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		JLabel SoldeInput = new JLabel(String.valueOf(this.compte.getSolde()));
 		SoldeInput.setHorizontalAlignment(SwingConstants.CENTER);
 		SoldeInput.setBounds(-2, 369, 602, 14);
 		panel.add(SoldeInput);
@@ -131,5 +212,10 @@ public class AccountDepositOrWithdraw extends JFrame {
 		Bgimage.setIcon(new ImageIcon(CreationClientForm.class.getResource("/images/BGimage.jpg")));
 		Bgimage.setBounds(0, 0, 1184, 761);
 		getContentPane().add(Bgimage);
+		setVisible(true);
 	}
+
+	
 }
+
+	
