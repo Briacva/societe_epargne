@@ -45,6 +45,7 @@ public class CreationClientForm extends JFrame {
 		
 		
 		socialReason = new JTextField(5);
+		socialReason.setForeground(Color.WHITE);
 		socialReason.setBorder(null);
 		socialReason.setBackground(SystemColor.desktop);
 		socialReason.setBounds(575, 149, 300, 30);
@@ -58,6 +59,7 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(lblNewLabel_1_1);
 		
 		NameText = new JTextField();
+		NameText.setForeground(Color.WHITE);
 		NameText.setBorder(null);
 		NameText.setBackground(SystemColor.desktop);
 		NameText.setBounds(575, 280, 300, 30);
@@ -71,6 +73,7 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(lblNewLabel_1_2);
 		
 		firstnameText = new JTextField();
+		firstnameText.setForeground(Color.WHITE);
 		firstnameText.setBorder(null);
 		firstnameText.setBackground(SystemColor.desktop);
 		firstnameText.setBounds(575, 339, 300, 30);
@@ -84,6 +87,7 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(lblNewLabel_1_3);
 		
 		EmailText = new JTextField();
+		EmailText.setForeground(Color.WHITE);
 		EmailText.setBorder(null);
 		EmailText.setBackground(SystemColor.desktop);
 		EmailText.setBounds(575, 460, 300, 30);
@@ -97,6 +101,7 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(lblEmail);
 		
 		civiliteText = new JComboBox<String>();
+		civiliteText.setForeground(Color.WHITE);
 		civiliteText.setBorder(null);
 		civiliteText.setBackground(SystemColor.desktop);
 		civiliteText.setBounds(575, 214, 300, 30);
@@ -112,6 +117,7 @@ public class CreationClientForm extends JFrame {
 		getContentPane().add(lblNewLabel_1_5);
 		
 		adressText = new JTextField();
+		adressText.setForeground(Color.WHITE);
 		adressText.setBorder(null);
 		adressText.setBackground(SystemColor.desktop);
 		adressText.setBounds(575, 516, 300, 60);
@@ -186,6 +192,7 @@ public class CreationClientForm extends JFrame {
 		panel.setLayout(null);
 		
 		phoneTextField = new JTextField();
+		phoneTextField.setForeground(Color.WHITE);
 		phoneTextField.setBackground(SystemColor.desktop);
 		phoneTextField.setBounds(314, 353, 300, 30);
 		panel.add(phoneTextField);
