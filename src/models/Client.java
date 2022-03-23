@@ -3,93 +3,95 @@ import java.util.Date;
 
 public class Client {
 	private int id;
-	private String raisonSocial;
+	private String raisonSociale;
 	private String libelleClient;
-	private String telephone;
+	private String numeroTel;
 	private String mail;
 	private String adresse;
 	private String civilite;
-	private Date dateDeNaissance;
-	private int id_Conseille;
+	private Date dateNaisssance;
+	private int id_Conseiller;
 	
-	
-//	constructeur
-	public Client(
-			String raisonSocial,
-			String libelleClient,
-			String telephone,
-			String mail,
-			String adresse,
-			String civilite,
-			Date dateDeNaissance,
-			int id_Conseille) {
-		
-		this.civilite = civilite;
-		this.raisonSocial = raisonSocial;
+	public Client(String raisonSociale, String libelleClient, String numeroTel, String mail, String adresse, String civilite, Date dateNaisssance, int id_Conseiller) {
+		this.raisonSociale = raisonSociale;
 		this.libelleClient = libelleClient;
-		this.telephone = telephone;
+		this.numeroTel = numeroTel;
 		this.mail = mail;
 		this.adresse = adresse;
-		this.dateDeNaissance = dateDeNaissance;
-		this.id_Conseille = id_Conseille;
+		this.civilite = civilite;
+		this.dateNaisssance = dateNaisssance;
+		this.id_Conseiller = id_Conseiller;
 	}
-	
-//	Getter et setter.
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getRaisonSocial() {
-		return raisonSocial;
+
+	public String getRaisonSociale() {
+		return raisonSociale;
 	}
-	public void setRaisonSocial(String raisonSocial) {
-		this.raisonSocial = raisonSocial;
+
+	public void setRaisonSociale(String raisonSociale) {
+		this.raisonSociale = raisonSociale;
 	}
+
 	public String getLibelleClient() {
 		return libelleClient;
 	}
-	public void
-			setLibelleClient(String libelleClient) {
+
+	public void setLibelleClient(String libelleClient) {
 		this.libelleClient = libelleClient;
 	}
-	public String getTelephone() {
-		return telephone;
+
+	public String getNumeroTel() {
+		return numeroTel;
 	}
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+
+	public void setNumeroTel(String numeroTel) {
+		this.numeroTel = numeroTel;
 	}
+
 	public String getMail() {
 		return mail;
 	}
+
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+
 	public String getAdresse() {
 		return adresse;
 	}
+
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
+
 	public String getCivilite() {
 		return civilite;
 	}
+
 	public void setCivilite(String civilite) {
 		this.civilite = civilite;
 	}
-	public Date getdateDeNaissance() {
-		return dateDeNaissance;
+
+	public Date getDateNaisssance() {
+		return dateNaisssance;
 	}
-	public void setdateDeNaissance(Date dateDeNaissance) {
-		this.dateDeNaissance = dateDeNaissance;
+
+	public void setDateNaisssance(Date dateNaisssance) {
+		this.dateNaisssance = dateNaisssance;
 	}
-	public int getId_Conseille() {
-		return id_Conseille;
+
+	public int getId_Conseiller() {
+		return id_Conseiller;
 	}
-	
-	public void setId_Conseille(int id_Conseille) {
-		this.id_Conseille = id_Conseille;
+
+	public void setId_Conseiller(int id_Conseiller) {
+		this.id_Conseiller = id_Conseiller;
 	}
 }

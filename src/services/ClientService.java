@@ -29,50 +29,34 @@ public class ClientService {
 		return app;
 	}
 
-	public static void fieldReinitialization(
-			CreationClientForm form) {
+	public static void fieldReinitialization(CreationClientForm form) {
 		form.getSocialReason().setText(null);
 		form.getNameText().setText(null);
 		form.getFirstnameText().setText(null);
 		form.getEmailText().setText(null);
 		form.getPhoneText().setText(null);
-		form.getCiviliteText()
-				.setSelectedIndex(0);
+		form.getCiviliteText().setSelectedIndex(0);
 		form.getAdressText().setText(null);
 	}
 
-	public static boolean patternMatches(
-			String emailText,
-			String regexPattern) {
-		return Pattern.compile(regexPattern)
-				.matcher((CharSequence) emailText)
-				.matches();
+	public static boolean patternMatches(String emailText, String regexPattern) {
+		return Pattern.compile(regexPattern).matcher((CharSequence) emailText).matches();
 	}
 
-	public static List<String>
-			requireText(CreationClientForm form) {
+	public static List<String> requireText(CreationClientForm form) {
 
 		// create a new ArrayList
-		List<String> fieldsInError =
-				new ArrayList<String>();
+		List<String> fieldsInError = new ArrayList<String>();
 
-		Hashtable<String, String> listFields =
-				new Hashtable<String, String>();
-		listFields.put("raison sociale",
-				form.getSocialReason().getText());
-		listFields.put("prénom",
-				form.getNameText().getText());
-		listFields.put("nom", form
-				.getFirstnameText().getText());
-		listFields.put("téléphone",
-				form.getPhoneText().getText());
-		listFields.put("email",
-				form.getEmailText().getText());
-		listFields.put("adresse",
-				form.getAdressText().getText());
+		Hashtable<String, String> listFields = new Hashtable<String, String>();
+		listFields.put("raison sociale", form.getSocialReason().getText());
+		listFields.put("prénom", form.getNameText().getText());
+		listFields.put("nom", form.getFirstnameText().getText());
+		listFields.put("téléphone", form.getPhoneText().getText());
+		listFields.put("email", form.getEmailText().getText());
+		listFields.put("adresse", form.getAdressText().getText());
 
-		Set<String> listFieldsKeys =
-				listFields.keySet();
+		Set<String> listFieldsKeys = listFields.keySet();
 
 		for (String key : listFieldsKeys) {
 			if (listFields.get(key).isEmpty()) {
@@ -80,26 +64,14 @@ public class ClientService {
 			}
 		}
 
-		if (listFields.get("raison sociale")
-				.isEmpty()
-				&& (!listFields.get("nom")
-						.isEmpty()
-						&& !listFields
-								.get("prénom")
-								.isEmpty())) {
-			fieldsInError
-					.remove("raison sociale");
+		if (listFields.get("raison sociale").isEmpty()
+				&& (!listFields.get("nom").isEmpty() && !listFields.get("prénom").isEmpty())) {
+			fieldsInError.remove("raison sociale");
 			fieldsInError.remove("nom");
 			fieldsInError.remove("prénom");
-		} else if (!listFields
-				.get("raison sociale").isEmpty()
-				&& (listFields.get("nom")
-						.isEmpty()
-						&& listFields
-								.get("prénom")
-								.isEmpty())) {
-			fieldsInError
-					.remove("raison sociale");
+		} else if (!listFields.get("raison sociale").isEmpty()
+				&& (listFields.get("nom").isEmpty() && listFields.get("prénom").isEmpty())) {
+			fieldsInError.remove("raison sociale");
 			fieldsInError.remove("nom");
 			fieldsInError.remove("prénom");
 		}
@@ -109,36 +81,27 @@ public class ClientService {
 
 	public List<Client> getAll() {
 		List<Client> list = new ArrayList<Client>();
-		
-		try{
+
+		try {
 			Connection conn = this.app.connect();
 			Statement stmt = conn.createStatement();
-			
+
 			String query = "SELECT * FROM client";
 			ResultSet rs = stmt.executeQuery(query);
-			
-			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
+
+			if (rs.isBeforeFirst()) { // Le curseur est-il avant la première ligne ? Sinon pas de données
 				while (rs.next()) {
-					
-					Client client = new Client
-					(
-		                rs.getString("raisonSociale"),
-		                rs.getString("libelleClient"),
-		                rs.getString("numeroTel"),
-		                rs.getString("mail"),
-		                rs.getString("adresse"),
-		                rs.getString("civilite"),
-		                rs.getDate("dateNaissance"),
-		                rs.getInt("id_Conseiller")
-					);
-					
+
+					Client client = new Client(rs.getString("raisonSociale"), rs.getString("libelleClient"),
+							rs.getString("numeroTel"), rs.getString("mail"), rs.getString("adresse"),
+							rs.getString("civilite"), rs.getDate("dateNaissance"), rs.getInt("id_Conseiller"));
+
 					client.setId(rs.getInt("id"));
 					list.add(client);
 
 				}
 			} else {
-				System.out.println(
-						"\nAucune donnée n'a été trouvé.");
+				System.out.println("\nAucune donnée n'a été trouvé.");
 			}
 
 			rs.close();

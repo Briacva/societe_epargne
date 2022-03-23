@@ -1,60 +1,22 @@
 package interfaces;
-import javax.swing.JFrame;
 
+import javax.swing.JFrame;
 import services.ClientService;
 import javax.swing.*;
 import javax.swing.text.*;
-
 import main.DatabaseConnexion;
 import models.Client;
 import models.TypeCivilite;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 
-
-
 public class CreationClientForm extends JFrame {
-	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public JTextField getSocialReason() {
-		return socialReason;
-	}
-
-	public JTextField getNameText() {
-		return NameText;
-	}
-
-	public JTextField getFirstnameText() {
-		return firstnameText;
-	}
-
-	public JTextField getEmailText() {
-		return EmailText;
-	}
-
-	public JTextField getAdressText() {
-		return adressText;
-	}
-
-	public JTextField getPhoneText() {
-		return phoneTextField;
-	}
-	
-	public JComboBox<String> getCiviliteText() {
-		return civiliteText;
-	}
 
 	private JTextField socialReason;
 	private JTextField NameText;
@@ -231,8 +193,6 @@ public class CreationClientForm extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon(CreationClientForm.class.getResource("/images/BGimage.jpg")));
 		lblNewLabel_2.setBounds(0, 0, 1184, 761);
 		getContentPane().add(lblNewLabel_2);
-		
-		this.setVisible(true);
 	}
 	
 	
@@ -252,6 +212,38 @@ public class CreationClientForm extends JFrame {
 	         super.insertString(offset, text, attr);
 	      }
 	   }
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public JTextField getSocialReason() {
+		return socialReason;
+	}
+
+	public JTextField getNameText() {
+		return NameText;
+	}
+
+	public JTextField getFirstnameText() {
+		return firstnameText;
+	}
+
+	public JTextField getEmailText() {
+		return EmailText;
+	}
+
+	public JTextField getAdressText() {
+		return adressText;
+	}
+
+	public JTextField getPhoneText() {
+		return phoneTextField;
+	}
+	
+	public JComboBox<String> getCiviliteText() {
+		return civiliteText;
 	}
 }
 
