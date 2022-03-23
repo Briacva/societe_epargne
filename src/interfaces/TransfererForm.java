@@ -114,8 +114,7 @@ public class TransfererForm extends JFrame {
 		btnCreer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Récupération de l'interface
-		        Component component = (Component) e.getSource();
-		        TransfererForm frame = (TransfererForm) SwingUtilities.getWindowAncestor(component);
+		        TransfererForm frame = getFrame();
 		        
 		        // alimentation du tableau des erreurs
 		        Hashtable<String, List<String>> errors = compteService.checkFields(null, frame);
@@ -167,8 +166,7 @@ public class TransfererForm extends JFrame {
 		btnReinitialiser.setBackground(new Color(30, 125, 125));
 		btnReinitialiser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		        Component component = (Component) e.getSource();
-		        TransfererForm frame = (TransfererForm) SwingUtilities.getWindowAncestor(component);
+		        TransfererForm frame = getFrame();
 		        
 		        compteService.fieldReinitialization(null, frame);
 			}
@@ -178,6 +176,16 @@ public class TransfererForm extends JFrame {
 		subPanelForm.add(btnReinitialiser);
 		
 		JButton btnRetour = new JButton("Retour");
+		btnRetour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TransfererForm frame = getFrame();
+				
+				ListeComptesForm liste = new ListeComptesForm();
+				liste.setVisible(true);
+				
+				frame.dispose();
+			}
+		});
 		btnRetour.setForeground(new Color(255, 255, 255));
 		btnRetour.setBackground(new Color(30, 125, 125));
 		btnRetour.setBounds(48, 541, 133, 33);
@@ -230,6 +238,10 @@ public class TransfererForm extends JFrame {
 		}
 		
 		pack();
+	}
+	
+	public TransfererForm getFrame() {
+		return this;
 	}
 	
 	public JTextField getTextFieldMontant() {

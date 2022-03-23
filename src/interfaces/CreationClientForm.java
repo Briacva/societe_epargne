@@ -1,6 +1,5 @@
 package interfaces;
 
-import javax.swing.JFrame;
 import services.ClientService;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -14,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
-import javax.swing.JOptionPane;
 
 public class CreationClientForm extends JFrame {
 
@@ -151,6 +149,16 @@ public class CreationClientForm extends JFrame {
         });
 		
 		JButton btnAnnuler = new JButton("Annuler");
+		btnAnnuler.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        Component component = (Component) e.getSource();
+		        CreationClientForm frame = (CreationClientForm) SwingUtilities.getWindowAncestor(component);
+		        
+		        ListeComptesForm liste = new ListeComptesForm();
+		        liste.setVisible(true);
+		        frame.dispose();
+			}
+		});
 		btnAnnuler.setBackground(new Color(255, 255, 255));
 		btnAnnuler.setFont(new Font("Ebrima", Font.PLAIN, 14));
 		btnAnnuler.setBounds(750, 649, 150, 40);

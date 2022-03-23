@@ -25,6 +25,7 @@ import javax.swing.JSeparator;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class ListeComptesForm extends JFrame {
 	
@@ -40,19 +41,19 @@ public class ListeComptesForm extends JFrame {
 		//instanciation des services
 		listeClientService = new ListeComptesService();
 		
-		//récupération de la liste des compte dans service
+		//rï¿½cupï¿½ration de la liste des compte dans service
 		List<Compte> listComptes = listeClientService.getComptes();	
 		
 		//Nom des colonnes du tableau liste de compte
-		String columns[] = { "Identifiant", "Raison sociale", "Numéro de compte", "Type de compte", "Solde", "Numero de téléphone", "Mail", "Adresse", "civilité", "Date de naisssance" };
+		String columns[] = { "Identifiant", "Raison sociale", "NumÃ©ro de compte", "Type de compte", "Solde", "Numero de tÃ©lÃ©phone", "Mail", "Adresse", "civilitÃ©", "Date de naisssance" };
 		
-		//donnée du tableau liste de compte // tableau 2d // affichage dynamique 
+		//donnï¿½e du tableau liste de compte // tableau 2d // affichage dynamique 
 		Object data[][] = new Object[listComptes.size()][columns.length];
 		for(int i = 0; i < listComptes.size(); i++){
-			//récupération de la liste des clients dans liste des comptes
+			//rï¿½cupï¿½ration de la liste des clients dans liste des comptes
 			Client client = listComptes.get(i).getClient(listComptes.get(i));
 			data[i][0] = listComptes.get(i).getId();
-			data[i][1] = client.getLibelleClient().isEmpty() || client.getLibelleClient().isBlank() || client.getLibelleClient() == null ? client.getRaisonSociale() : client.getLibelleClient();
+			data[i][1] = client.getLibelleClient() == null || client.getLibelleClient().isEmpty() || client.getLibelleClient().isBlank() ? client.getRaisonSociale() : client.getLibelleClient();
 			data[i][2] = listComptes.get(i).getNumCompte();
 			data[i][3] = listComptes.get(i).getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
 			data[i][4] = listComptes.get(i).getSolde();
@@ -93,28 +94,28 @@ public class ListeComptesForm extends JFrame {
             }
         };
         
-        //Selection d'un élément dans un tableau
+        //Selection d'un ï¿½lï¿½ment dans un tableau
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
                 // do some actions here, for example
                 // print first column value from selected row
-            	int column = 0;
-            	int row = table.getSelectedRow();
-            	String value = table.getModel().getValueAt(row, column).toString();
-                System.out.println(value);
                 btnCreditOrDebit.setEnabled(true);
             }
         });
         
         //permet d'avoir la scroll barre
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(52, 91, 929, 426);
+        scrollPane.setBounds(12, 91, 1004, 426);
         subPanel.add(scrollPane);
         
 		JButton btnAddClient = new JButton("Ajouter un client");
 		btnAddClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+		        ListeComptesForm frame = getFrame();
+		        
 				CreationClientForm createClient = new CreationClientForm();
+				createClient.setVisible(true);
+				frame.dispose();
 			}
 		});
 		
@@ -127,11 +128,11 @@ public class ListeComptesForm extends JFrame {
         JButton btnAjouterCompte = new JButton("Ajouter un compte");
         btnAjouterCompte.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-		        Component component = (Component) e.getSource();
-		        ListeComptesForm frame = (ListeComptesForm) SwingUtilities.getWindowAncestor(component);
+        		ListeComptesForm frame = getFrame();
 		        
         		OuvrirCompteForm addCompte = new OuvrirCompteForm();
         		addCompte.setVisible(true);
+        		
         		frame.dispose();
         	}
         });
@@ -142,14 +143,25 @@ public class ListeComptesForm extends JFrame {
         btnAjouterCompte.setBounds(287, 549, 191, 34);
         subPanel.add(btnAjouterCompte);
         
-        JButton btnTransfertFond = new JButton("Transférer des fonds");
+        JButton btnTransfertFond = new JButton("TransfÃ©rer des fonds");
+        btnTransfertFond.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+		        ListeComptesForm frame = getFrame();
+		        
+        		TransfererForm transfertFonds = new TransfererForm();
+        		transfertFonds.setVisible(true);
+        		
+        		frame.dispose();
+        	}
+        });
+        
         btnTransfertFond.setBackground(new Color(30, 125, 125));
         btnTransfertFond.setForeground(Color.WHITE);
         btnTransfertFond.setFont(new Font("Tahoma", Font.BOLD, 14));
         btnTransfertFond.setBounds(543, 549, 213, 34);
         subPanel.add(btnTransfertFond);
         
-        btnCreditOrDebit = new JButton("Créditer/Débiter");
+        btnCreditOrDebit = new JButton("CrÃ©diter/DÃ©biter");
         btnCreditOrDebit.setEnabled(false);
         btnCreditOrDebit.setBackground(new Color(30, 125, 125));
         btnCreditOrDebit.setForeground(Color.WHITE);
@@ -158,15 +170,16 @@ public class ListeComptesForm extends JFrame {
         subPanel.add(btnCreditOrDebit);
         
         JLabel lblNewLabel = new JLabel("LISTE DES COMPTES");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel.setForeground(new Color(51, 51, 51));
         lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 22));
-        lblNewLabel.setBounds(374, 22, 250, 25);
+        lblNewLabel.setBounds(0, 0, 1028, 47);
         subPanel.add(lblNewLabel);
         
         JSeparator separator = new JSeparator();
         separator.setForeground(new Color(0, 102, 102));
         separator.setBackground(new Color(0, 102, 102));
-        separator.setBounds(395, 57, 191, 2);
+        separator.setBounds(417, 42, 191, 2);
         subPanel.add(separator);
         
         JLabel lbllblBackground = new JLabel("");
@@ -176,6 +189,10 @@ public class ListeComptesForm extends JFrame {
 		pack();
 	}
 
+	public ListeComptesForm getFrame() {
+		return this;
+	}
+	
 	public ListeComptesService getListeClientService() {
 		return listeClientService;
 	}
