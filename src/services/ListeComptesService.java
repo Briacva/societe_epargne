@@ -26,11 +26,15 @@ public class ListeComptesService {
 	}
 	
 	public List<Compte> getComptes() {
+		
+		//Récupération de la liste des compte dans le model
 		List<Compte> listComptes = new ArrayList<Compte>();
 		
+		//Requête selectionnant tout dans compte et ajoute la table client
 		String query = "SELECT co.* FROM compte co INNER JOIN client cl ON co.id_Client = cl.id WHERE co.cloture = " + CompteStatut.ACTIF.getStatut();
 		
 		try {
+			//connection a la base de donnée via main/databaseConnection
 			  Connection conn = this.app.connect();
 			  PreparedStatement preparedStmt = conn.prepareStatement(query);
 		  	  ResultSet rs = preparedStmt.executeQuery();

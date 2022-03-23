@@ -28,12 +28,19 @@ public class ListeComptesForm extends JFrame {
 	private ListeComptesService listeClientService;
 	
 	public ListeComptesForm() {
+		//instanciation des services
 		listeClientService = new ListeComptesService();
+		
+		//récupération de la liste des compte dans service
 		List<Compte> listComptes = listeClientService.getComptes();	
-		String columns[] = { "Identifiant", "Raison sociale", "Numéro de Compte", "Type de Compte", "Solde", "Numero de téléphone", "mail", "adresse", "civilite", "dateNaisssance" };
-		//List<Compte> -> compte.getClient.getAdress, etc...
+		
+		//Nom des colonnes du tableau liste de compte
+		String columns[] = { "Identifiant", "Raison sociale", "Numéro de compte", "Type de compte", "Solde", "Numero de téléphone", "Mail", "Adresse", "civilité", "Date de naisssance" };
+		
+		//donnée du tableau liste de compte // tableau 2d // affichage dynamique 
 		Object data[][] = new Object[listComptes.size()][columns.length];
 		for(int i = 0; i < listComptes.size(); i++){
+			//récupération de la liste des clients dans liste des comptes
 			Client client = listComptes.get(i).getClient(listComptes.get(i));
 			data[i][0] = listComptes.get(i).getId();
 			data[i][1] = client.getLibelleClient().isEmpty() || client.getLibelleClient().isBlank() || client.getLibelleClient() == null ? client.getRaisonSociale() : client.getLibelleClient();
@@ -81,6 +88,7 @@ public class ListeComptesForm extends JFrame {
             }
         };
         
+        //Selection d'un élément dans un tableau
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
                 // do some actions here, for example
@@ -92,6 +100,7 @@ public class ListeComptesForm extends JFrame {
             }
         });
         
+        //permet d'avoir la scroll barre
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(126, 156, 929, 426);
         panel.add(scrollPane);
