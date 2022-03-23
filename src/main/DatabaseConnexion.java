@@ -28,7 +28,6 @@ public class DatabaseConnexion {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(url, user, password);
-			System.out.println("Connected to the mysql server successfully.");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -38,7 +37,7 @@ public class DatabaseConnexion {
 
 	public static void Update(Client client) {
 		try {
-			String query = "INSERT INTO Client (`raisonSociale`,`libelleClient`,`numeroTel`,`mail`,`adresse`,`civilite`,`id_Conseiller`) VALUES ('"
+			String query = "INSERT INTO client (`raisonSociale`,`libelleClient`,`numeroTel`,`mail`,`adresse`,`civilite`,`id_Conseiller`) VALUES ('"
 					+ client.getRaisonSociale() + "', '" + client.getLibelleClient() + "', '" + client.getNumeroTel()
 					+ "', '" + client.getMail() + "', '" + client.getAdresse() + "' , '" + client.getCivilite() + "', "
 					+ client.getId_Conseiller() + ")";
