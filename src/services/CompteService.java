@@ -19,6 +19,7 @@ import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import interfaces.AccountDepositOrWithdraw;
 import interfaces.OuvrirCompteForm;
 import main.DatabaseConnexion;
 import models.Client;
@@ -302,4 +303,31 @@ public class CompteService {
 		
 		return error;
 	}
+	
+	  public boolean updateDepositOrWithdraw(AccountDepositOrWithdraw frame) {
+	        boolean isUpdated = false;
+	        
+	        String query = "UPDATE Compte set solde = solde + ? WHERE id = ?";
+	        
+	        try {          
+	            // create the mysql insert preparedstatement
+	            Connection conn = this.app.connect();
+	            float sarko = frame.getRdbtndebit().isSelected() ? 0 - Float.parseFloat(frame.getMontantTextField().getText()) : Float.parseFloat(frame.getMontantTextField().getText());
+	            PreparedStatement preparedStmt = conn.prepareStatement(query);
+	            
+	            preparedStmt.setFloat (1, sarko);
+	            preparedStmt.setInt      (2, frame.getIdCompte());
+	            System.out
+						.println(sarko);
+	            // check si la requête s'est correctement executée
+	            isUpdated = preparedStmt.executeUpdate() == 1;
+	            conn.close();
+	              
+	        } catch (SQLException e) {
+	            System.err.println("Got an exception!");
+	            System.err.println(e.getMessage());
+	        }
+	        
+	        return isUpdated;
+	    }
 }
