@@ -1,6 +1,7 @@
 package services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -63,4 +64,36 @@ public class ClientService {
 		
 		return list;
 	}
+
+	public Client getClientById(int idClient) {
+        // TODO Auto-generated method stub
+        Client client = null;
+        try {
+            String query = "SELECT * FROM client WHERE id =" + idClient;
+            Connection conn = this.app.connect();
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            ResultSet rs = preparedStmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String raisonSocial = rs.getString("raisonSociale");
+                String libelleClient = rs.getString("libelleClient");
+                String numeroTel = rs.getString("numeroTel");
+                String mail = rs.getString("mail");
+                String adresse = rs.getString("adresse");
+                String civilite = rs.getString("civilite");
+                Date dateDeNaissance = rs.getDate("dateNaissance");
+                int idConseille = rs.getInt("id_Conseiller");
+                client = new Client(raisonSocial, libelleClient, numeroTel, mail, adresse, civilite, dateDeNaissance, idConseille);
+                client.setId(id);
+                rs.close();
+            }
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return client;
+    }
+	
 }

@@ -1,6 +1,6 @@
 package models;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Client {
 	private int id;
@@ -10,11 +10,10 @@ public class Client {
 	private String mail;
 	private String adresse;
 	private String civilite;
-	private String dateNaisssance;
+	private Date dateNaisssance;
 	private int id_Conseiller;
 	
-	public Client(int id, String raisonSociale, String libelleClient, String numeroTel, String mail, String adresse, String civilite, String dateNaisssance, int id_Conseiller) {
-		this.id = id;
+	public Client(String raisonSociale, String libelleClient, String numeroTel, String mail, String adresse, String civilite, Date dateNaisssance, int id_Conseiller) {
 		this.raisonSociale = raisonSociale;
 		this.libelleClient = libelleClient;
 		this.numeroTel = numeroTel;
@@ -81,11 +80,11 @@ public class Client {
 		this.civilite = civilite;
 	}
 
-	public String getDateNaisssance() {
+	public Date getDateNaisssance() {
 		return dateNaisssance;
 	}
 
-	public void setDateNaisssance(String dateNaisssance) {
+	public void setDateNaisssance(Date dateNaisssance) {
 		this.dateNaisssance = dateNaisssance;
 	}
 

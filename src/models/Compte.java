@@ -3,6 +3,8 @@
  */
 package models;
 
+import services.ClientService;
+
 /**
  * @author marvin
  *
@@ -15,6 +17,7 @@ public class Compte {
 	protected boolean cloture;
 	protected boolean typeCompte;
 	protected int idClient;
+	private ClientService clientService;
 	
 	public Compte(/*int id, */int numCompte, float solde, float soldeInitial, boolean cloture, boolean typeCompte, int idClient) {
 //		this.id = id;
@@ -24,6 +27,7 @@ public class Compte {
 		this.cloture = cloture;
 		this.typeCompte = typeCompte;
 		this.idClient = idClient;
+		this.clientService = new ClientService();
 	}
 
 	public int getId() {
@@ -80,5 +84,11 @@ public class Compte {
 
 	public void setIdClient(int idClient) {
 		this.idClient = idClient;
+	}
+	
+	public Client getClient(Compte compte) {
+		Client client = clientService.getClientById(compte.getIdClient());
+		
+		return client;
 	}
 }

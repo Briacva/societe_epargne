@@ -1,7 +1,7 @@
 package main;
 
 //import interfaces.OuvrirCompteForm;
-import interfaces.ListeClientForm;
+import interfaces.ListeComptesForm;
 
 public class Program {
 
@@ -10,7 +10,7 @@ public class Program {
 		//OuvrirCompteForm newBankAccount = new OuvrirCompteForm();
 		//newBankAccount.setVisible(true);
 		
-		ListeClientForm newListClient = new ListeClientForm();
+		ListeComptesForm newListClient = new ListeComptesForm();
 		newListClient.setVisible(true);
 	}
 

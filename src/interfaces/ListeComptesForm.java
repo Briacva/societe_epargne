@@ -11,38 +11,43 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import models.Client;
-import services.ListeClientService;
+import models.Compte;
+import models.TypeCompte;
+import services.ListeComptesService;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.util.List;
 
-public class ListeClientForm extends JFrame {
+public class ListeComptesForm extends JFrame {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel panelHeader = new JPanel();
-	private ListeClientService listeClientService;
+	private ListeComptesService listeClientService;
 	
-	public ListeClientForm() {
-		listeClientService = new ListeClientService();
-		List<Client> listClients = listeClientService.getClients();	
-		String columns[] = { "id", "raisonSociale", "libelleClient", "numeroTel", "mail", "adresse", "civilite", "dateNaisssance" };
-		
-		Object data[][] = new Object[listClients.size()][columns.length];
-		for(int i = 0; i < listClients.size(); i++){
-			data[i][0] = listClients.get(i).getId();
-			data[i][1] = listClients.get(i).getRaisonSociale();
-			data[i][2] = listClients.get(i).getLibelleClient();
-			data[i][3] = listClients.get(i).getNumeroTel();
-			data[i][4] = listClients.get(i).getMail();
-			data[i][5] = listClients.get(i).getAdresse();
-			data[i][6] = listClients.get(i).getCivilite();
-			data[i][7] = listClients.get(i).getDateNaisssance();
+	public ListeComptesForm() {
+		listeClientService = new ListeComptesService();
+		List<Compte> listComptes = listeClientService.getComptes();	
+		String columns[] = { "Identifiant", "Raison sociale", "Numéro de Compte", "Type de Compte", "Solde", "Numero de téléphone", "mail", "adresse", "civilite", "dateNaisssance" };
+		//List<Compte> -> compte.getClient.getAdress, etc...
+		Object data[][] = new Object[listComptes.size()][columns.length];
+		for(int i = 0; i < listComptes.size(); i++){
+			Client client = listComptes.get(i).getClient(listComptes.get(i));
+			data[i][0] = listComptes.get(i).getId();
+			data[i][1] = client.getLibelleClient().isEmpty() || client.getLibelleClient().isBlank() || client.getLibelleClient() == null ? client.getRaisonSociale() : client.getLibelleClient();
+			data[i][2] = listComptes.get(i).getNumCompte();
+			data[i][3] = listComptes.get(i).getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
+			data[i][4] = listComptes.get(i).getSolde();
+			data[i][5] = client.getNumeroTel();
+			data[i][6] = client.getMail();
+			data[i][7] = client.getAdresse();
+			data[i][8] = client.getCivilite();
+			data[i][9] = client.getDateNaisssance();
 		}
-					    
-		setTitle("Liste des clients");
+		
+		setTitle("Liste des comptes clients");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setPreferredSize(new Dimension(1200, 700));
@@ -56,8 +61,8 @@ public class ListeClientForm extends JFrame {
 		panelHeader.setBackground(new Color(57, 91, 100));
 		panelHeader.setBounds(0, 0, 1200, 96);
 		panel.add(panelHeader);
-		
 		panelHeader.setLayout(null);
+		
 		JButton btnAddClient = new JButton("Ajouter un client");
 		btnAddClient.setForeground(new Color(57, 91, 100));
 		btnAddClient.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -78,8 +83,6 @@ public class ListeClientForm extends JFrame {
         
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
-            	
-            	
                 // do some actions here, for example
                 // print first column value from selected row
             	int column = 0;
@@ -95,7 +98,7 @@ public class ListeClientForm extends JFrame {
 		pack();
 	}
 
-	public ListeClientService getListeClientService() {
+	public ListeComptesService getListeClientService() {
 		return listeClientService;
 	}
 }

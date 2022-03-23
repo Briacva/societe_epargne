@@ -15,6 +15,12 @@ public enum TypeCompte {
         return this.type;
     }
     
+    // getter method
+    public String getLibelleType()
+    {
+        return type ? "Epargne" : "Courant";
+    }
+    
     // enum constructor - cannot be public or protected
     private TypeCompte(boolean type)
     {
