@@ -131,7 +131,7 @@ public class AccountDepositOrWithdraw extends JFrame {
 		panel.add(NameOrSocialReason);
 		
 		Client client = clientService.getClientById(this.compte.getIdClient());
-		JLabel NameOrSocialInput = new JLabel(client.getRaisonSocial() == null || client.getRaisonSocial().isEmpty() || client.getRaisonSocial().isBlank() ? client.getLibelleClient() : client.getRaisonSocial());
+		JLabel NameOrSocialInput = new JLabel(client.getRaisonSociale() == null || client.getRaisonSociale().isEmpty() || client.getRaisonSociale().isBlank() ? client.getLibelleClient() : client.getRaisonSociale());
 		NameOrSocialInput.setHorizontalAlignment(SwingConstants.CENTER);
 		NameOrSocialInput.setBounds(-2, 304, 602, 14);
 		panel.add(NameOrSocialInput);

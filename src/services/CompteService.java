@@ -365,8 +365,8 @@ public class CompteService {
 			for(Client client: clients) {
 				int id = client.getId();
 				String libelleClient = client.getLibelleClient();
-				String raisonSociale = client.getRaisonSocial();
-				String telephone = client.getTelephone();
+				String raisonSociale = client.getRaisonSociale();
+				String telephone = client.getNumeroTel();
 				String adresse = client.getAdresse();
 				
 				form.getListClients().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
@@ -417,7 +417,7 @@ public class CompteService {
 				int id = compte.getId();
 				Client client = compte.getClient(compte);
 				String libelleClient = client.getLibelleClient();
-				String raisonSociale = client.getRaisonSocial();
+				String raisonSociale = client.getRaisonSociale();
 				String typeCompte = compte.getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
 				int numCompte = compte.getNumCompte();
 				
