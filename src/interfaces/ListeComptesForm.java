@@ -11,6 +11,8 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import models.Client;
 import models.Compte;
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
@@ -34,18 +37,19 @@ public class ListeComptesForm extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel subPanel = new JPanel();
-	private ListeComptesService listeClientService;
+	private ListeComptesService listeComptesService;
 	private JButton btnCreditOrDebit;
+	private JButton btnCloturer;
 	
 	public ListeComptesForm() {
 		//instanciation des services
-		listeClientService = new ListeComptesService();
+		listeComptesService = new ListeComptesService();
 		
 		//r�cup�ration de la liste des compte dans service
-		List<Compte> listComptes = listeClientService.getComptes();	
+		List<Compte> listComptes = listeComptesService.getComptes();	
 		
 		//Nom des colonnes du tableau liste de compte
-		String columns[] = { "Identifiant", "Raison sociale", "Numéro de compte", "Type de compte", "Solde", "Numero de téléphone", "Mail", "Adresse", "civilité", "Date de naisssance" };
+		String columns[] = { "Identifiant", "Raison sociale", "Numéro", "Type", "Solde", "Téléphone", "Mail", "Adresse", "ivilité", "Naisssance" };
 		
 		//donn�e du tableau liste de compte // tableau 2d // affichage dynamique 
 		Object data[][] = new Object[listComptes.size()][columns.length];
@@ -82,7 +86,8 @@ public class ListeComptesForm extends JFrame {
 		subPanel.setBounds(70, 47, 1028, 595);
 		panel.add(subPanel);
         
-        JTable table = new JTable(data, columns) {
+		DefaultTableModel tableModel = new DefaultTableModel(data, columns);
+        JTable table = new JTable(tableModel) {
             /**
         	 * 
         	 */
@@ -100,6 +105,7 @@ public class ListeComptesForm extends JFrame {
                 // do some actions here, for example
                 // print first column value from selected row
                 btnCreditOrDebit.setEnabled(true);
+                btnCloturer.setEnabled(true);
             }
         });
         
@@ -122,7 +128,7 @@ public class ListeComptesForm extends JFrame {
 		btnAddClient.setBackground(new Color(30, 125, 125));
 		btnAddClient.setForeground(Color.WHITE);
 		btnAddClient.setFont(new Font("Tahoma", Font.BOLD, 14));
-		btnAddClient.setBounds(52, 549, 191, 34);
+		btnAddClient.setBounds(12, 549, 191, 34);
 		subPanel.add(btnAddClient);
 		
         JButton btnAjouterCompte = new JButton("Ajouter un compte");
@@ -140,7 +146,7 @@ public class ListeComptesForm extends JFrame {
         btnAjouterCompte.setBackground(new Color(30, 125, 125));
         btnAjouterCompte.setForeground(Color.WHITE);
         btnAjouterCompte.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btnAjouterCompte.setBounds(287, 549, 191, 34);
+        btnAjouterCompte.setBounds(226, 549, 191, 34);
         subPanel.add(btnAjouterCompte);
         
         JButton btnTransfertFond = new JButton("Transférer des fonds");
@@ -158,7 +164,7 @@ public class ListeComptesForm extends JFrame {
         btnTransfertFond.setBackground(new Color(30, 125, 125));
         btnTransfertFond.setForeground(Color.WHITE);
         btnTransfertFond.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btnTransfertFond.setBounds(543, 549, 213, 34);
+        btnTransfertFond.setBounds(440, 549, 213, 34);
         subPanel.add(btnTransfertFond);
         
         btnCreditOrDebit = new JButton("Créditer/Débiter");
@@ -166,7 +172,7 @@ public class ListeComptesForm extends JFrame {
         btnCreditOrDebit.setBackground(new Color(30, 125, 125));
         btnCreditOrDebit.setForeground(Color.WHITE);
         btnCreditOrDebit.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btnCreditOrDebit.setBounds(816, 549, 165, 34);
+        btnCreditOrDebit.setBounds(677, 549, 165, 34);
         subPanel.add(btnCreditOrDebit);
         
         JLabel lblNewLabel = new JLabel("LISTE DES COMPTES");
@@ -182,9 +188,54 @@ public class ListeComptesForm extends JFrame {
         separator.setBounds(417, 42, 191, 2);
         subPanel.add(separator);
         
+        btnCloturer = new JButton("Clôturer");
+        btnCloturer.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Object[] options =
+        			{
+        				"Oh yeaaaah",
+                        "Hell no !",
+                    };
+        		
+			    int response = JOptionPane.showOptionDialog(getContentPane(),
+			        "Voulez-vous vraiment clôturer le compte ?",
+			        "Attention !",
+			        JOptionPane.YES_NO_CANCEL_OPTION,
+			        JOptionPane.QUESTION_MESSAGE,
+			        null,
+			        options,
+			        options[1]
+		        );
+
+			    if(response == 0) {
+	            	int value = Integer.parseInt(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+	            	
+			    	if(listeComptesService.clotureCompte(value)){
+	                	JOptionPane.showMessageDialog(getContentPane(), 
+	                	         "Le compte a bien été clôturé !",
+	                	         " Erreur ",
+	                	         JOptionPane.INFORMATION_MESSAGE);
+
+	                	tableModel.removeRow(table.getSelectedRow());
+			    	}else {
+	                	JOptionPane.showMessageDialog(getContentPane(), 
+	                	         "Une erreur s'est produite, le compte n'a pas pu être clôturé !",
+	                	         " Erreur ",
+	                	         JOptionPane.ERROR_MESSAGE);
+			    	}
+			    }
+        	}
+        });
+        btnCloturer.setEnabled(false);
+        btnCloturer.setForeground(Color.WHITE);
+        btnCloturer.setFont(new Font("Dialog", Font.BOLD, 14));
+        btnCloturer.setBackground(new Color(30, 125, 125));
+        btnCloturer.setBounds(862, 549, 154, 34);
+        subPanel.add(btnCloturer);
+        
         JLabel lbllblBackground = new JLabel("");
         lbllblBackground.setIcon(new ImageIcon(ListeComptesForm.class.getResource("/images/backgroundAccountManagement.jpg")));
-        lbllblBackground.setBounds(0, 0, 1190, 663);
+        lbllblBackground.setBounds(0, 0, 1211, 700);
         panel.add(lbllblBackground);
 		pack();
 	}
@@ -193,7 +244,7 @@ public class ListeComptesForm extends JFrame {
 		return this;
 	}
 	
-	public ListeComptesService getListeClientService() {
-		return listeClientService;
+	public ListeComptesService getlisteComptesService() {
+		return listeComptesService;
 	}
 }

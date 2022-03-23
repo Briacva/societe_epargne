@@ -27,14 +27,14 @@ public class ListeComptesService {
 	
 	public List<Compte> getComptes() {
 		
-		//Récupération de la liste des compte dans le model
+		//Rï¿½cupï¿½ration de la liste des compte dans le model
 		List<Compte> listComptes = new ArrayList<Compte>();
 		
-		//Requête selectionnant tout dans compte et ajoute la table client
+		//Requï¿½te selectionnant tout dans compte et ajoute la table client
 		String query = "SELECT co.* FROM compte co INNER JOIN client cl ON co.id_Client = cl.id WHERE co.cloture = " + CompteStatut.ACTIF.getStatut();
 		
 		try {
-			//connection a la base de donnée via main/databaseConnection
+			//connection a la base de donnï¿½e via main/databaseConnection
 			  Connection conn = this.app.connect();
 			  PreparedStatement preparedStmt = conn.prepareStatement(query);
 		  	  ResultSet rs = preparedStmt.executeQuery();
@@ -58,5 +58,31 @@ public class ListeComptesService {
 		}
 		
 		return listComptes;
+	}
+	
+	public boolean clotureCompte(int idCompte) {
+		boolean isUpdated = false;
+		
+		String query = "UPDATE compte set cloture = ? WHERE id = ?";
+		
+        try {	      
+		    // create the mysql insert preparedstatement
+	        Connection conn = this.app.connect();
+	        PreparedStatement preparedStmt = conn.prepareStatement(query);
+
+	        preparedStmt.setBoolean (1, CompteStatut.CLOTURE.getStatut());
+	        preparedStmt.setInt 	(2, idCompte);
+	        
+	
+	        // check si la requÃªte s'est correctement executÃ©e
+	        isUpdated = preparedStmt.executeUpdate() == 1;
+	        conn.close();
+		      
+		} catch (SQLException e) {
+		    System.err.println("Got an exception!");
+		    System.err.println(e.getMessage());
+		}
+		
+		return isUpdated;
 	}
 }
