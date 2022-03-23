@@ -29,10 +29,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class AccountDepositOrWithdraw extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField MontantTextField;
-	private JLabel AccountNumber;
-	private JLabel NameOrSocialInput;
-	private JLabel SoldeIntput;
 	private Compte compte;
 	private JRadioButton rdbtndebit;
 	private JRadioButton rdbtnCredit;
@@ -40,8 +41,6 @@ public class AccountDepositOrWithdraw extends JFrame {
 	private CompteService compteService;
 	private JButton Validate;
 	private int idCompte;
-	
-	
 	
 	public Compte getCompte() {
 		return compte;
@@ -53,16 +52,13 @@ public class AccountDepositOrWithdraw extends JFrame {
 
 	public void
 			setAccountNumber(JLabel accountNumber) {
-		AccountNumber = accountNumber;
 	}
 
 	public void setNameOrSocialInput(
 			JLabel nameOrSocialInput) {
-		NameOrSocialInput = nameOrSocialInput;
 	}
 
 	public void setSoldeIntput(JLabel soldeIntput) {
-		SoldeIntput = soldeIntput;
 	}
 	
 	public JRadioButton getRdbtndebit() {
@@ -93,8 +89,8 @@ public class AccountDepositOrWithdraw extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("D\u00E9bit/Retrait");
-		lblNewLabel.setBounds(204, 35, 202, 37);
+		JLabel lblNewLabel = new JLabel("Débit/Crédit");
+		lblNewLabel.setBounds(-2, 34, 602, 37);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
 		panel.add(lblNewLabel);
@@ -135,7 +131,7 @@ public class AccountDepositOrWithdraw extends JFrame {
 		panel.add(NameOrSocialReason);
 		
 		Client client = clientService.getClientById(this.compte.getIdClient());
-		JLabel NameOrSocialInput = new JLabel(client.getRaisonSocial().isEmpty() || client.getRaisonSocial().isBlank() ? client.getLibelleClient():client.getRaisonSocial());
+		JLabel NameOrSocialInput = new JLabel(client.getRaisonSocial() == null || client.getRaisonSocial().isEmpty() || client.getRaisonSocial().isBlank() ? client.getLibelleClient() : client.getRaisonSocial());
 		NameOrSocialInput.setHorizontalAlignment(SwingConstants.CENTER);
 		NameOrSocialInput.setBounds(-2, 304, 602, 14);
 		panel.add(NameOrSocialInput);
@@ -176,7 +172,7 @@ public class AccountDepositOrWithdraw extends JFrame {
 				}else {
 					if (compteService.updateDepositOrWithdraw(frame)){
 						JOptionPane.showMessageDialog(getContentPane(), 
-								"Tout s'est bien pass� Guignole",
+								"Tout s'est bien pass� Guignole",
 			       	         	" Valider ",
 			       	         	JOptionPane.INFORMATION_MESSAGE);
 					} else {
@@ -184,14 +180,10 @@ public class AccountDepositOrWithdraw extends JFrame {
 								"Ta encore fais de la merde bordel",
 			       	         	" Try again ",
 			       	         	JOptionPane.ERROR_MESSAGE);
-						
 					}
-					
 				}
 			}
 		});
-			
-                
 		
 		JButton Cancel = new JButton("Annuler");
 		Cancel.setBounds(355, 522, 105, 35);
@@ -214,8 +206,6 @@ public class AccountDepositOrWithdraw extends JFrame {
 		getContentPane().add(Bgimage);
 		setVisible(true);
 	}
-
-	
 }
 
 	
