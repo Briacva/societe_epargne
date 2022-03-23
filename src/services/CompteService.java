@@ -188,7 +188,7 @@ public class CompteService {
 	public boolean addCompte(Compte compte) {
 		boolean isCreated = false;
 		// the mysql insert statement
-		String query = "INSERT INTO Compte(numeroCompte, solde, soldeInitial, cloture, typeCompte, id_Client)"
+		String query = "INSERT INTO compte(numeroCompte, solde, soldeInitial, cloture, typeCompte, id_Client)"
 		+ " VALUES (?, ?, ?, ?, ?, ?)";
 	      
 		try {
@@ -222,7 +222,7 @@ public class CompteService {
 		int idCompte = getLastCompte(compte.getNumCompte());
 		compte.setId(idCompte);
 		
-		String query = "INSERT INTO CompteCourant(id, soldeMinimum, fraisTransfert)"
+		String query = "INSERT INTO comptecourant(id, soldeMinimum, fraisTransfert)"
 		        + " VALUES (?, ?, ?)";
 		try {	      
     	  // create the mysql insert preparedstatement
@@ -251,7 +251,7 @@ public class CompteService {
 		int idCompte = getLastCompte(compte.getNumCompte());
 		compte.setId(idCompte);
 		
-		String query = "INSERT INTO CompteEpargne(id, plafond, tauxInteret)"
+		String query = "INSERT INTO compteepargne(id, plafond, tauxInteret)"
 		        + " VALUES (?, ?, ?)";
 		      
         try {	      
@@ -278,7 +278,7 @@ public class CompteService {
 	public boolean addTransfert(Transfert transfert) {
 		boolean isCreated = false;
 		
-		String query = "INSERT INTO Transferer(idCompteDebiteur, idCompteCredite, montant, dateTransfert)"
+		String query = "INSERT INTO transferer(idCompteDebiteur, idCompteCredite, montant, dateTransfert)"
 		        + " VALUES (?, ?, ?, ?)";
 		      
         try {	      
@@ -306,8 +306,8 @@ public class CompteService {
 	public boolean updateCompte(Transfert transfert) {
 		boolean isUpdated = false;
 		
-		String queryDebite = "UPDATE Compte set solde = solde - ? WHERE id = ?";
-		String queryCredite = "UPDATE Compte set solde = solde + ? WHERE id = ?";
+		String queryDebite = "UPDATE compte set solde = solde - ? WHERE id = ?";
+		String queryCredite = "UPDATE compte set solde = solde + ? WHERE id = ?";
 		
         try {	      
 		    // create the mysql insert preparedstatement
@@ -338,7 +338,7 @@ public class CompteService {
 		Integer id = null;
 		
 		try {
-			String query = "SELECT MAX(id) FROM Compte WHERE numeroCompte = " + numCompte;
+			String query = "SELECT MAX(id) FROM compte WHERE numeroCompte = " + numCompte;
 			Connection conn = this.app.connect();
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -413,8 +413,9 @@ public class CompteService {
 		try {
 			for(Compte compte: comptes) {
 				int id = compte.getId();
-				String libelleClient = compte.getClient(compte).getLibelleClient();
-				String raisonSociale = compte.getClient(compte).getRaisonSocial();
+				Client client = compte.getClient(compte);
+				String libelleClient = client.getLibelleClient();
+				String raisonSociale = client.getRaisonSocial();
 				String typeCompte = compte.getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
 				int numCompte = compte.getNumCompte();
 				
@@ -439,7 +440,7 @@ public class CompteService {
 			Connection conn = this.app.connect();
 			Statement stmt = conn.createStatement();
 			
-			String query = "SELECT CO.* FROM Compte CO INNER JOIN Client CL ON CO.id_Client = CL.id WHERE CO.cloture = " + CompteStatut.ACTIF.getStatut();
+			String query = "SELECT co.* FROM compte co INNER JOIN client cl ON co.id_Client = cl.id WHERE co.cloture = " + CompteStatut.ACTIF.getStatut();
 			ResultSet rs = stmt.executeQuery(query);
 			
 			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données

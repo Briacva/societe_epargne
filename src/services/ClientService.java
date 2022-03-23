@@ -30,7 +30,7 @@ public class ClientService {
 			Connection conn = this.app.connect();
 			Statement stmt = conn.createStatement();
 			
-			String query = "SELECT * FROM Client";
+			String query = "SELECT * FROM client";
 			ResultSet rs = stmt.executeQuery(query);
 			
 			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
@@ -69,7 +69,7 @@ public class ClientService {
         // TODO Auto-generated method stub
         Client client = null;
         try {
-            String query = "SELECT *FROM Client WHERE id =" + idClient;
+            String query = "SELECT * FROM client WHERE id =" + idClient;
             Connection conn = this.app.connect();
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             ResultSet rs = preparedStmt.executeQuery();
