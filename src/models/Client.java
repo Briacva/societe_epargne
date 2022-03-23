@@ -1,5 +1,4 @@
 package models;
-
 import java.util.Date;
 
 public class Client {
@@ -25,7 +24,6 @@ public class Client {
 			Date dateDeNaissance,
 			int id_Conseille) {
 		
-		super();
 		this.civilite = civilite;
 		this.raisonSocial = raisonSocial;
 		this.libelleClient = libelleClient;
@@ -35,8 +33,6 @@ public class Client {
 		this.dateDeNaissance = dateDeNaissance;
 		this.id_Conseille = id_Conseille;
 	}
-	
-	
 	
 //	Getter et setter.
 	
@@ -96,8 +92,4 @@ public class Client {
 	public void setId_Conseille(int id_Conseille) {
 		this.id_Conseille = id_Conseille;
 	}
-	
-	
-
-
 }

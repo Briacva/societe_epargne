@@ -14,6 +14,7 @@ import models.Client;
  *
  */
 public class DatabaseConnexion {
+
     private final static String url = "jdbc:mysql://localhost:3307/societe_epargne";
     private final static String user = "root";
     private final static String password = "";

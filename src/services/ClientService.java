@@ -7,16 +7,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
-
 import interfaces.CreationClientForm;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -112,46 +107,32 @@ public class ClientService {
 		return fieldsInError;
 	}
 
-	public List<Object> getAll() {
-		List<Object> list =
-				new ArrayList<Object>();
-
-		try {
+	public List<Client> getAll() {
+		List<Client> list = new ArrayList<Client>();
+		
+		try{
 			Connection conn = this.app.connect();
-			Statement stmt =
-					conn.createStatement();
-
-			String query = "SELECT * FROM Client";
-			ResultSet rs =
-					stmt.executeQuery(query);
-
-			if (rs.isBeforeFirst()) { // Le curseur est-il avant la première ligne ? Sinon pas de données
+			Statement stmt = conn.createStatement();
+			
+			String query = "SELECT * FROM client";
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
 				while (rs.next()) {
-
-					Object client = new Object() {
-						int id = rs.getInt("id");
-						String raisonSociale =
-								rs.getString(
-										"raisonSociale");
-						String libelleClient =
-								rs.getString(
-										"libelleClient");
-						String numeroTel =
-								rs.getString(
-										"numeroTel");
-						String adresse =
-								rs.getString(
-										"adresse");
-						String civilite =
-								rs.getString(
-										"civilite");
-						Date dateNaissance =
-								rs.getDate(
-										"dateNaissance");
-						int idConseiller = rs
-								.getInt("id_Conseiller");
-					};
-
+					
+					Client client = new Client
+					(
+		                rs.getString("raisonSociale"),
+		                rs.getString("libelleClient"),
+		                rs.getString("numeroTel"),
+		                rs.getString("mail"),
+		                rs.getString("adresse"),
+		                rs.getString("civilite"),
+		                rs.getDate("dateNaissance"),
+		                rs.getInt("id_Conseiller")
+					);
+					
+					client.setId(rs.getInt("id"));
 					list.add(client);
 
 				}
@@ -169,33 +150,33 @@ public class ClientService {
 	}
 
 	public Client getClientById(int idClient) {
-		// TODO Auto-generated method stub
-		Client client = null;
-		try {
-			String query = "SELECT *FROM client WHERE id =" + idClient;
-			Connection conn = this.app.connect();
-			PreparedStatement preparedStmt = conn.prepareStatement(query);
-			ResultSet rs = preparedStmt.executeQuery();
-			if (rs.next()) {
-				int id = rs.getInt("id");
-				String raisonSocial = rs.getString("raisonSociale");
-				String libelleClient = rs.getString("libelleClient");
-				String numeroTel = rs.getString("numeroTel");
-				String mail = rs.getString("mail");
-				String adresse = rs.getString("adresse");
-				String civilite = rs.getString("civilite");
-				Date dateDeNaissance = rs.getDate("dateNaissance");
-				int idConseille = rs.getInt("id_Conseiller");
-				client = new Client(raisonSocial, libelleClient, numeroTel, mail, adresse, civilite, dateDeNaissance, idConseille);
-				client.setId(id);
-				rs.close();
-	        }
-	        
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return client;
-	}
+        // TODO Auto-generated method stub
+        Client client = null;
+        try {
+            String query = "SELECT * FROM client WHERE id =" + idClient;
+            Connection conn = this.app.connect();
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            ResultSet rs = preparedStmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String raisonSocial = rs.getString("raisonSociale");
+                String libelleClient = rs.getString("libelleClient");
+                String numeroTel = rs.getString("numeroTel");
+                String mail = rs.getString("mail");
+                String adresse = rs.getString("adresse");
+                String civilite = rs.getString("civilite");
+                Date dateDeNaissance = rs.getDate("dateNaissance");
+                int idConseille = rs.getInt("id_Conseiller");
+                client = new Client(raisonSocial, libelleClient, numeroTel, mail, adresse, civilite, dateDeNaissance, idConseille);
+                client.setId(id);
+                rs.close();
+            }
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return client;
+    }
 }

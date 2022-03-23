@@ -1,32 +1,32 @@
 package services;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.swing.ComboBoxEditor;
-import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import interfaces.AccountDepositOrWithdraw;
 import interfaces.OuvrirCompteForm;
+import interfaces.TransfererForm;
 import main.DatabaseConnexion;
 import models.Client;
 import models.Compte;
 import models.CompteCourant;
 import models.CompteEpargne;
 import models.CompteStatut;
+import models.Transfert;
 import models.TypeCompte;
 
 public class CompteService {
@@ -54,12 +54,18 @@ public class CompteService {
 	 * 
 	 * @param OuvrirCompteForm
 	 */
-	public void fieldReinitialization(OuvrirCompteForm form) {
-		form.getTextFieldSoldeInitial().setText(null);
-		form.getTextFieldSoldeMinimum().setText(null);
-		form.getTextFieldFraisDeTransfert().setText(null);
-		form.getTextFieldTauxInteret().setText(null);
-		form.getTextFieldPlafond().setText(null);
+	public void fieldReinitialization(OuvrirCompteForm formNewAccount, TransfererForm formTransfert) {
+		if(formNewAccount != null) {
+			formNewAccount.getTextFieldSoldeInitial().setText(null);
+			formNewAccount.getTextFieldSoldeMinimum().setText(null);
+			formNewAccount.getTextFieldFraisDeTransfert().setText(null);
+			formNewAccount.getTextFieldTauxInteret().setText(null);
+			formNewAccount.getTextFieldPlafond().setText(null);
+		}else {
+			formTransfert.getComboBoxCompteDestinataire().setSelectedIndex(0);
+			formTransfert.getComboBoxCompteSource().setSelectedIndex(0);
+			formTransfert.getTextFieldMontant().setText(null);
+		}
 	}
 	
 	/**
@@ -67,7 +73,7 @@ public class CompteService {
 	 * @param form
 	 * @return
 	 */
-	public Hashtable<String, List<String>> checkFields(OuvrirCompteForm form) {
+	public Hashtable<String, List<String>> checkFields(OuvrirCompteForm formNewAccount, TransfererForm formTransfert) {
 		
         // initialisation du tableau associatif d'erreur
 		Hashtable<String, List<String>> fieldsInError = new Hashtable<String, List<String>>();
@@ -80,12 +86,18 @@ public class CompteService {
         
         // initialisation d'un tableau associatif contenant les libellés et la valeur des champs du formulaire
         Hashtable<String, String> listFields = new Hashtable<String, String>();
-        listFields.put("client", form.getComboBoxClients().getSelectedItem().toString());
-        listFields.put("solde initial", form.getTextFieldSoldeInitial().getText());
-        listFields.put("solde minimum", form.getTextFieldSoldeMinimum().getText());
-        listFields.put("frais de transfert", form.getTextFieldFraisDeTransfert().getText());
-        listFields.put("taux d'intéret", form.getTextFieldTauxInteret().getText());
-        listFields.put("plafond", form.getTextFieldPlafond().getText());
+        if(formNewAccount != null) {
+	        listFields.put("client", formNewAccount.getComboBoxClients().getSelectedItem().toString());
+	        listFields.put("solde initial", formNewAccount.getTextFieldSoldeInitial().getText());
+	        listFields.put("solde minimum", formNewAccount.getTextFieldSoldeMinimum().getText());
+	        listFields.put("frais de transfert", formNewAccount.getTextFieldFraisDeTransfert().getText());
+	        listFields.put("taux d'intéret", formNewAccount.getTextFieldTauxInteret().getText());
+	        listFields.put("plafond", formNewAccount.getTextFieldPlafond().getText());
+        }else {
+        	listFields.put("compte source", formTransfert.getComboBoxCompteSource().getSelectedItem().toString());
+        	listFields.put("compte destinataire", formTransfert.getComboBoxCompteDestinataire().getSelectedItem().toString());
+        	listFields.put("montant", formTransfert.getTextFieldMontant().getText());
+        }
         
         // récupérations des clés du tableau associatif
         Set<String> listFieldsKeys = listFields.keySet();
@@ -95,19 +107,24 @@ public class CompteService {
         	// le champ est-il vide ?
             if(listFields.get(key).isEmpty()) {
             	
-            	// si création d'un compte courant, ajout du champ concerné dans la liste appropriée
-            	if(form.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
-                	emptyFields.add(key);
-            	}else if(form.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
-            		// si création d'un compte épargne, ajout du champs concerné dans la liste appropriée
-            		emptyFields.add(key);
-            	}else if(key.equals("solde initial") || key.equals("client")){
-            		// ajout du champ dans la liste appropriée
+            	if(formNewAccount != null) {
+	            	// si création d'un compte courant, ajout du champ concerné dans la liste appropriée
+	            	if(formNewAccount.getRdbtnCompteCourant().isSelected() && (key.equals("solde minimum") || key.equals("frais de transfert"))) {
+	                	emptyFields.add(key);
+	            	}else if(formNewAccount.getRdbtnCompteEpargne().isSelected() && (key.equals("taux d'intéret") || key.equals("plafond"))) {
+	            		// si création d'un compte épargne, ajout du champs concerné dans la liste appropriée
+	            		emptyFields.add(key);
+	            	}else if(key.equals("solde initial") || key.equals("client")){
+	            		// ajout du champ dans la liste appropriée
+	            		emptyFields.add(key);
+	            	}
+            	}else {
             		emptyFields.add(key);
             	}
             // Sinon, est-il bien au format numérique ?	
             }else {
-            	if(key != "client" && !this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
+            	if((!key.equals("client") && !key.equals("compte source") && !key.equals("compte destinataire")) && !this.patternMatches(listFields.get(key), "[+-]?([0-9]*[.])?[0-9]+")) {
+
             		//Sinon ajout dans la liste appropriée
             		badNumericFields.add(key);
             	}
@@ -144,7 +161,7 @@ public class CompteService {
 		float soldeInitial = solde;
 		boolean cloture = CompteStatut.ACTIF.getStatut();
 		boolean typeCompte = form.getRdbtnCompteCourant().isSelected() ? TypeCompte.COURANT.getType() : TypeCompte.EPARGNE.getType();
-		int idClient = form.getListClientKey(form.getComboBoxClients().getSelectedItem().toString());
+		int idClient = this.getListClientKey(form.getListClients(), form.getComboBoxClients().getSelectedItem().toString());
 		
 		Compte compte = new Compte(numCompte, solde, soldeInitial, cloture, typeCompte, idClient);
 		isCreatedCompte = addCompte(compte);
@@ -173,7 +190,7 @@ public class CompteService {
 	public boolean addCompte(Compte compte) {
 		boolean isCreated = false;
 		// the mysql insert statement
-		String query = "INSERT INTO Compte(numeroCompte, solde, soldeInitial, cloture, typeCompte, id_Client)"
+		String query = "INSERT INTO compte(numeroCompte, solde, soldeInitial, cloture, typeCompte, id_Client)"
 		+ " VALUES (?, ?, ?, ?, ?, ?)";
 	      
 		try {
@@ -207,7 +224,7 @@ public class CompteService {
 		int idCompte = getLastCompte(compte.getNumCompte());
 		compte.setId(idCompte);
 		
-		String query = "INSERT INTO CompteCourant(id, soldeMinimum, fraisTransfert)"
+		String query = "INSERT INTO comptecourant(id, soldeMinimum, fraisTransfert)"
 		        + " VALUES (?, ?, ?)";
 		try {	      
     	  // create the mysql insert preparedstatement
@@ -236,7 +253,7 @@ public class CompteService {
 		int idCompte = getLastCompte(compte.getNumCompte());
 		compte.setId(idCompte);
 		
-		String query = "INSERT INTO CompteEpargne(id, plafond, tauxInteret)"
+		String query = "INSERT INTO compteepargne(id, plafond, tauxInteret)"
 		        + " VALUES (?, ?, ?)";
 		      
         try {	      
@@ -260,11 +277,70 @@ public class CompteService {
         return isCreated;
 	}
 	
+	public boolean addTransfert(Transfert transfert) {
+		boolean isCreated = false;
+		
+		String query = "INSERT INTO transferer(idCompteDebiteur, idCompteCredite, montant, dateTransfert)"
+		        + " VALUES (?, ?, ?, ?)";
+		      
+        try {	      
+		    // create the mysql insert preparedstatement
+	        Connection conn = this.app.connect();
+	        PreparedStatement preparedStmt = conn.prepareStatement(query);
+	      
+	        preparedStmt.setInt 		(1, transfert.getIdCompteDebiteur());
+	        preparedStmt.setInt 		(2, transfert.getIdCompteCredite());
+	        preparedStmt.setFloat 		(3, transfert.getMontant());
+	        preparedStmt.setDate		(4,  new java.sql.Date(transfert.getDateTransfert().getTime()));
+	
+	        // check si la requête s'est correctement executée
+	        isCreated = preparedStmt.executeUpdate() == 1;
+	        conn.close();
+		      
+		} catch (SQLException e) {
+		    System.err.println("Got an exception!");
+		    System.err.println(e.getMessage());
+		}
+        
+        return isCreated;
+	}
+	
+	public boolean updateCompte(Transfert transfert) {
+		boolean isUpdated = false;
+		
+		String queryDebite = "UPDATE compte set solde = solde - ? WHERE id = ?";
+		String queryCredite = "UPDATE compte set solde = solde + ? WHERE id = ?";
+		
+        try {	      
+		    // create the mysql insert preparedstatement
+	        Connection conn = this.app.connect();
+	        PreparedStatement preparedStmtCredite = conn.prepareStatement(queryCredite);
+
+	        preparedStmtCredite.setFloat (1, transfert.getMontant());
+	        preparedStmtCredite.setInt 	 (2, transfert.getIdCompteCredite());
+	        
+	        PreparedStatement preparedStmtDebite = conn.prepareStatement(queryDebite);
+
+	        preparedStmtDebite.setFloat (1, transfert.getMontant());
+	        preparedStmtDebite.setInt 	(2, transfert.getIdCompteDebiteur());
+	
+	        // check si la requête s'est correctement executée
+	        isUpdated = preparedStmtCredite.executeUpdate() == 1 && preparedStmtDebite.executeUpdate() == 1;
+	        conn.close();
+		      
+		} catch (SQLException e) {
+		    System.err.println("Got an exception!");
+		    System.err.println(e.getMessage());
+		}
+		
+		return isUpdated;
+	}
+	
 	public int getLastCompte(int numCompte) {
 		Integer id = null;
 		
 		try {
-			String query = "SELECT MAX(id) FROM Compte WHERE numeroCompte = " + numCompte;
+			String query = "SELECT MAX(id) FROM compte WHERE numeroCompte = " + numCompte;
 			Connection conn = this.app.connect();
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -283,20 +359,20 @@ public class CompteService {
 	
 	public boolean fillListClients(OuvrirCompteForm form) {
 		boolean error = false;
-		List<Object> clients = clientService.getAll();
+		List<Client> clients = clientService.getAll();
 		
 		try {
-			for(Object client: clients) {
-				int id = Integer.parseInt(client.getClass().getDeclaredField("id").get(client).toString());
-				String libelleClient = client.getClass().getDeclaredField("libelleClient").get(client) == null ? "" : client.getClass().getDeclaredField("libelleClient").get(client).toString();
-				String raisonSociale = client.getClass().getDeclaredField("raisonSociale").get(client) == null ? "" : client.getClass().getDeclaredField("raisonSociale").get(client).toString();
-				String telephone = client.getClass().getDeclaredField("numeroTel").get(client).toString();
-				String adresse = client.getClass().getDeclaredField("adresse").get(client).toString();
+			for(Client client: clients) {
+				int id = client.getId();
+				String libelleClient = client.getLibelleClient();
+				String raisonSociale = client.getRaisonSocial();
+				String telephone = client.getTelephone();
+				String adresse = client.getAdresse();
 				
-				form.getListClients().put(id, libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
-				form.getComboBoxClients().addItem(libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getListClients().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
+				form.getComboBoxClients().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + telephone + " - " + adresse : libelleClient + " - " + telephone + " - " + adresse);
 			}
-		}catch(SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+		}catch(SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
 			error = true;
 		}
@@ -304,30 +380,124 @@ public class CompteService {
 		return error;
 	}
 	
-	  public boolean updateDepositOrWithdraw(AccountDepositOrWithdraw frame) {
-	        boolean isUpdated = false;
-	        
-	        String query = "UPDATE Compte set solde = solde + ? WHERE id = ?";
-	        
-	        try {          
-	            // create the mysql insert preparedstatement
-	            Connection conn = this.app.connect();
-	            float sarko = frame.getRdbtndebit().isSelected() ? 0 - Float.parseFloat(frame.getMontantTextField().getText()) : Float.parseFloat(frame.getMontantTextField().getText());
-	            PreparedStatement preparedStmt = conn.prepareStatement(query);
-	            
-	            preparedStmt.setFloat (1, sarko);
-	            preparedStmt.setInt      (2, frame.getIdCompte());
-	            System.out
-						.println(sarko);
-	            // check si la requ�te s'est correctement execut�e
-	            isUpdated = preparedStmt.executeUpdate() == 1;
-	            conn.close();
-	              
-	        } catch (SQLException e) {
-	            System.err.println("Got an exception!");
-	            System.err.println(e.getMessage());
+	public boolean createTransfert(TransfererForm form) {
+		
+		boolean isCreatedTransfert = false, isUpdated = false;
+		
+		int idCompteSource = this.getListClientKey(form.getListCompteSource(), form.getComboBoxCompteSource().getSelectedItem().toString());
+		int idCompteDestinataire = this.getListClientKey(form.getListCompteDestinataire(), form.getComboBoxCompteDestinataire().getSelectedItem().toString());
+		float montant = Float.parseFloat(form.getTextFieldMontant().getText());
+        Date sysDate = new Date();
+		
+		Transfert transfert = new Transfert(idCompteSource, idCompteDestinataire, montant, sysDate);
+		
+		isCreatedTransfert = addTransfert(transfert);
+		isUpdated = updateCompte(transfert);
+		
+		return isCreatedTransfert && isUpdated;
+	}
+	
+	public int getListClientKey(Hashtable<Integer, String> list, String value) {
+		Integer id = -1;
+	    for(Map.Entry<Integer, String> entry : list.entrySet()){
+	        if(entry.getValue().equals(value)){
+	            id = entry.getKey();
 	        }
-	        
-	        return isUpdated;
 	    }
+	    
+	    return id;
+	}
+	
+	public boolean fillListComptes(TransfererForm form) {
+		boolean error = false;
+		List<Compte> comptes = this.getAll();
+		
+		try {
+			for(Compte compte: comptes) {
+				int id = compte.getId();
+				Client client = compte.getClient(compte);
+				String libelleClient = client.getLibelleClient();
+				String raisonSociale = client.getRaisonSocial();
+				String typeCompte = compte.getTypeCompte() ? TypeCompte.EPARGNE.getLibelleType() : TypeCompte.COURANT.getLibelleType();
+				int numCompte = compte.getNumCompte();
+				
+				form.getListCompteSource().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteSource().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+			
+				form.getListCompteDestinataire().put(id, libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+				form.getComboBoxCompteDestinataire().addItem(libelleClient == null || libelleClient.isEmpty() || libelleClient.isBlank() ? raisonSociale + " - " + numCompte + " - " + typeCompte : libelleClient + " - " + numCompte + " - " + typeCompte);
+			}
+		}catch(SecurityException | IllegalArgumentException e) {
+			e.printStackTrace();
+			error = true;
+		}
+		
+		return error;
+	}
+	
+  public boolean updateDepositOrWithdraw(AccountDepositOrWithdraw frame) {
+        boolean isUpdated = false;
+        
+        String query = "UPDATE Compte set solde = solde + ? WHERE id = ?";
+        
+        try {          
+            // create the mysql insert preparedstatement
+            Connection conn = this.app.connect();
+            float sarko = frame.getRdbtndebit().isSelected() ? 0 - Float.parseFloat(frame.getMontantTextField().getText()) : Float.parseFloat(frame.getMontantTextField().getText());
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            
+            preparedStmt.setFloat (1, sarko);
+            preparedStmt.setInt      (2, frame.getIdCompte());
+            System.out
+					.println(sarko);
+            // check si la requ�te s'est correctement execut�e
+            isUpdated = preparedStmt.executeUpdate() == 1;
+            conn.close();
+              
+        } catch (SQLException e) {
+            System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+        
+        return isUpdated;
+    }
+
+	public List<Compte> getAll() {
+		List<Compte> list = new ArrayList<Compte>();
+		
+		try{
+			Connection conn = this.app.connect();
+			Statement stmt = conn.createStatement();
+			
+			String query = "SELECT co.* FROM compte co INNER JOIN client cl ON co.id_Client = cl.id WHERE co.cloture = " + CompteStatut.ACTIF.getStatut();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if (rs.isBeforeFirst()) {  // Le curseur est-il avant la première ligne ? Sinon pas de données
+				while (rs.next()) {
+					Compte compte = new Compte(
+							rs.getInt("numeroCompte"),
+							rs.getFloat("solde"),
+							rs.getFloat("soldeInitial"),
+							rs.getBoolean("cloture"),
+							rs.getBoolean("typeCompte"),
+							rs.getInt("id_Client")
+					);
+					
+					compte.setId(rs.getInt("id"));
+					
+					list.add(compte);
+					
+				}
+			}else {
+				System.out.println("\nAucune donnée n'a été trouvé.");
+			}
+			
+			rs.close();
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+		}
+		
+		return list;
+	}
 }
