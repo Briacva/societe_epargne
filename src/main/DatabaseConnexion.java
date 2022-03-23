@@ -12,9 +12,9 @@ import java.sql.SQLException;
  *
  */
 public class DatabaseConnexion {
-    private final String url = "jdbc:mysql://localhost:3306/societe_epargne";
+    private final String url = "jdbc:mysql://localhost:3307/societe_epargne";
     private final String user = "root";
-    private final String password = "password";
+    private final String password = "";
 
     /**
      * Connect to the Mysql database
