@@ -213,7 +213,7 @@ public class ListeComptesForm extends JFrame {
 			    	if(listeComptesService.clotureCompte(value)){
 	                	JOptionPane.showMessageDialog(getContentPane(), 
 	                	         "Le compte a bien été clôturé !",
-	                	         " Erreur ",
+	                	         " Information ",
 	                	         JOptionPane.INFORMATION_MESSAGE);
 
 	                	tableModel.removeRow(table.getSelectedRow());
