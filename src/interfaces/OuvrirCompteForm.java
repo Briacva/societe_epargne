@@ -369,6 +369,15 @@ public class OuvrirCompteForm extends JFrame {
 		subPanelForm.add(btnReinitialiser);
 		
 		JButton btnRetour = new JButton("Retour");
+		btnRetour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Component component = (Component) e.getSource();
+		        OuvrirCompteForm frame = (OuvrirCompteForm) SwingUtilities.getWindowAncestor(component);
+				ListeComptesForm listeComptes = new ListeComptesForm();
+				listeComptes.setVisible(true);
+				frame.dispose();
+			}
+		});
 		btnRetour.setForeground(new Color(255, 255, 255));
 		btnRetour.setBackground(new Color(30, 125, 125));
 		btnRetour.setBounds(48, 541, 133, 33);
