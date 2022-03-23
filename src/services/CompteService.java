@@ -438,7 +438,7 @@ public class CompteService {
   public boolean updateDepositOrWithdraw(AccountDepositOrWithdraw frame) {
         boolean isUpdated = false;
         
-        String query = "UPDATE Compte set solde = solde + ? WHERE id = ?";
+        String query = "UPDATE compte set solde = solde + ? WHERE id = ?";
         
         try {          
             // create the mysql insert preparedstatement
@@ -460,6 +460,36 @@ public class CompteService {
         }
         
         return isUpdated;
+    }
+  
+	public Compte getCompteById(int idCompte) {
+        // TODO Auto-generated method stub
+        Compte compte = null;
+        try {
+            String query = "SELECT * FROM compte WHERE id =" + idCompte;
+            Connection conn = this.app.connect();
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            ResultSet rs = preparedStmt.executeQuery();
+            if (rs.next()) {
+				compte = new Compte(
+						rs.getInt("numeroCompte"),
+						rs.getFloat("solde"),
+						rs.getFloat("soldeInitial"),
+						rs.getBoolean("cloture"),
+						rs.getBoolean("typeCompte"),
+						rs.getInt("id_Client")
+				);
+				
+				compte.setId(rs.getInt("id"));
+                rs.close();
+            }
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return compte;
     }
 
 	public List<Compte> getAll() {

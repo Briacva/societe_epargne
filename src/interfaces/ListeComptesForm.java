@@ -17,6 +17,7 @@ import javax.swing.table.TableModel;
 import models.Client;
 import models.Compte;
 import models.TypeCompte;
+import services.CompteService;
 import services.ListeComptesService;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -38,12 +39,14 @@ public class ListeComptesForm extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private final JPanel subPanel = new JPanel();
 	private ListeComptesService listeComptesService;
+	private CompteService compteService;
 	private JButton btnCreditOrDebit;
 	private JButton btnCloturer;
 	
 	public ListeComptesForm() {
 		//instanciation des services
 		listeComptesService = new ListeComptesService();
+		compteService = new CompteService();
 		
 		//r�cup�ration de la liste des compte dans service
 		List<Compte> listComptes = listeComptesService.getComptes();	
@@ -168,6 +171,16 @@ public class ListeComptesForm extends JFrame {
         subPanel.add(btnTransfertFond);
         
         btnCreditOrDebit = new JButton("Créditer/Débiter");
+        btnCreditOrDebit.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		ListeComptesForm frame = getFrame();
+            	int value = Integer.parseInt(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+            	Compte compte = compteService.getCompteById(value);
+            	AccountDepositOrWithdraw creditOrDebit = new AccountDepositOrWithdraw(compte);
+            	creditOrDebit.setVisible(true);
+            	frame.dispose();
+        	}
+        });
         btnCreditOrDebit.setEnabled(false);
         btnCreditOrDebit.setBackground(new Color(30, 125, 125));
         btnCreditOrDebit.setForeground(Color.WHITE);
