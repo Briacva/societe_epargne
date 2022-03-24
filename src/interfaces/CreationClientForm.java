@@ -192,6 +192,7 @@ public class CreationClientForm extends JFrame {
 		panel.setLayout(null);
 		
 		phoneTextField = new JTextField();
+		phoneTextField.setBorder(null);
 		phoneTextField.setForeground(Color.WHITE);
 		phoneTextField.setBackground(SystemColor.desktop);
 		phoneTextField.setBounds(314, 353, 300, 30);
