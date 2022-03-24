@@ -230,6 +230,8 @@ public class ListeComptesForm extends JFrame {
 	                	         JOptionPane.INFORMATION_MESSAGE);
 
 	                	tableModel.removeRow(table.getSelectedRow());
+	                	btnCloturer.setEnabled(false);
+	                	btnCreditOrDebit.setEnabled(false);
 			    	}else {
 	                	JOptionPane.showMessageDialog(getContentPane(), 
 	                	         "Une erreur s'est produite, le compte n'a pas pu être clôturé !",
