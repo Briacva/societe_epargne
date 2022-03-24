@@ -158,6 +158,10 @@ public class CreationClientForm extends JFrame {
                 	Client client = new Client(socialReason.getText(), toStringLibelleClient(), phoneTextField.getText() , EmailText.getText(), adressText.getText(), civiliteText.getSelectedItem().toString(),null, 1 );
                 	DatabaseConnexion.Update(client);
                 	ClientService.fieldReinitialization(frame);
+                  	JOptionPane.showMessageDialog(getContentPane(), 
+                  	         "Le client a bien été enregistré.",
+                  	         " Information ",
+                  	         JOptionPane.INFORMATION_MESSAGE);
                 	ListeComptesForm list = new ListeComptesForm();
                 	list.setVisible(true);
                 	frame.dispose();
