@@ -52,7 +52,7 @@ public class ListeComptesForm extends JFrame {
 		List<Compte> listComptes = listeComptesService.getComptes();	
 		
 		//Nom des colonnes du tableau liste de compte
-		String columns[] = { "Identifiant", "Raison sociale", "Numéro", "Type", "Solde", "Téléphone", "Mail", "Adresse", "ivilité", "Naisssance" };
+		String columns[] = { "Identifiant", "Raison sociale", "Numéro", "Type", "Solde", "Téléphone", "Mail", "Adresse", "Civilité", "Naissance" };
 		
 		//donn�e du tableau liste de compte // tableau 2d // affichage dynamique 
 		Object data[][] = new Object[listComptes.size()][columns.length];
