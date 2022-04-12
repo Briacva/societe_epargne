@@ -140,7 +140,7 @@ public class TransfererForm extends JFrame {
 	            // sinon le champ solde initial est-il inférieur au champ soolde minimum
                 }
                 else {
-                	//vérifier que le champ taux d'intérêt est pas supérieur à 100
+                	//vérifier que le champ taux d'intérêt est pas supérieur à 100 
                 	if(compteService.createTransfert(frame)){
                     	JOptionPane.showMessageDialog(getContentPane(), 
   		                      "Le transfert a bien été effectué !",

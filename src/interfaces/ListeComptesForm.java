@@ -48,7 +48,7 @@ public class ListeComptesForm extends JFrame {
 		listeComptesService = new ListeComptesService();
 		compteService = new CompteService();
 		
-		//r�cup�ration de la liste des compte dans service
+		//récupération de la liste des compte dans service
 		List<Compte> listComptes = listeComptesService.getComptes();	
 		
 		//Nom des colonnes du tableau liste de compte
