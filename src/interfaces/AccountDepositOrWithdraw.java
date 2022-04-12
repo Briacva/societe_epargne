@@ -176,14 +176,14 @@ public class AccountDepositOrWithdraw extends JFrame {
 				AccountDepositOrWithdraw frame = getFrame();
 				
 				if (MontantTextField.getText().isEmpty() || MontantTextField.getText().isBlank()) {
-					JOptionPane.showMessageDialog(getContentPane(), "Saisi un montant pauvre con !!", " Erreur ",
+					JOptionPane.showMessageDialog(getContentPane(), "Veuillez saisir un montant !", " Erreur ",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					if (compteService.updateDepositOrWithdraw(frame)) {
-						JOptionPane.showMessageDialog(getContentPane(), "Tout s'est bien passé Guignole", " Valider ",
+						JOptionPane.showMessageDialog(getContentPane(), "Le transaction a bien été effectué", " Valider ",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(getContentPane(), "T'as encore fait de la merde bordel",
+						JOptionPane.showMessageDialog(getContentPane(), "Une erreur s'est produite.",
 								" Try again ", JOptionPane.ERROR_MESSAGE);
 					}
 				}

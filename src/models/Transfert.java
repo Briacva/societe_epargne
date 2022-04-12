@@ -10,6 +10,7 @@ import java.util.Date;
  *
  */
 public class Transfert {
+	private int idTransfert;
 	private int idCompteDebiteur;
 	private int idCompteCredite;
 	private float montant;
@@ -20,6 +21,14 @@ public class Transfert {
 		this.idCompteCredite = idCompteCredite;
 		this.montant = montant;
 		this.dateTransfert = dateTransfert;
+	}
+
+	public int getIdTransfert() {
+		return idTransfert;
+	}
+
+	public void setIdTransfert(int idTransfert) {
+		this.idTransfert = idTransfert;
 	}
 
 	public int getIdCompteDebiteur() {
