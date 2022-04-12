@@ -290,7 +290,7 @@ public class CompteService {
 	public boolean addTransfert(Transfert transfert) {
 		boolean isCreated = false;
 
-		String query = "INSERT INTO transferer(idCompteDebiteur, idCompteCredite, montant, dateTransfert)"
+		String query = "INSERT INTO transferer(idCompteDebite, idCompteCredite, montant, dateTransfert)"
 				+ " VALUES (?, ?, ?, ?)";
 
 		try {
