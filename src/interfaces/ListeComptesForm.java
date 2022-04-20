@@ -206,8 +206,8 @@ public class ListeComptesForm extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		Object[] options =
         			{
-        				"Oh yeaaaah",
-                        "Hell no !",
+        				"Oui",
+                        "Non",
                     };
         		
 			    int response = JOptionPane.showOptionDialog(getContentPane(),
